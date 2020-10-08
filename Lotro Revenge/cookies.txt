@@ -1,0 +1,6 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+.google.com	TRUE	/	FALSE	1999999999	NID	204=Q7NvCkJYdpHYmrMOErFLzswHZFbRaFCxDGiZP6I-crJCo33zBLMpx8cXe9Qh3Qc0g0FAjaLSDBHIR9M-MS18WEZlKy8xOJRsbqbQh1h_pEP4VPhB74BNlhq7pQJ7F2H0l3uhl1RMmbQcByi9j8isuXWZpyOo214wbfv9buhdIQs
+.ragecollection.com	TRUE	/	FALSE	1999999999	__cfduid	d01a3b3416a3ba2773dd93cbc036e92031602195150
+ragecollection.com	TRUE	/	FALSE	1999999999	SameSite	Lax
+

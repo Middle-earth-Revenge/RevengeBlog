@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html class='v2' dir='ltr' lang='de'>
+
+<!-- Mirrored from bwgypyth.blogspot.com/2013/03/initial-attempt-at-packet-analyzer.html?showComment=1363417984409 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Oct 2020 22:13:30 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<link href='../../../www.blogger.com/static/v1/widgets/3416767676-css_bundle_v2.css' rel='stylesheet' type='text/css'/>
+<meta content='width=1100' name='viewport'/>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+<meta content='blogger' name='generator'/>
+<link href='../../favicon.ico' rel='icon' type='image/x-icon'/>
+<link href='initial-attempt-at-packet-analyzer.html' rel='canonical'/>
+<link rel="alternate" type="application/atom+xml" title="lotro revenge - Atom" href="../../feeds/posts/default" />
+<link rel="alternate" type="application/rss+xml" title="lotro revenge - RSS" href="../../feeds/posts/default9522?alt=rss" />
+<link rel="service.post" type="application/atom+xml" title="lotro revenge - Atom" href="https://www.blogger.com/feeds/5998090735925918818/posts/default" />
+
+<link rel="alternate" type="application/atom+xml" title="lotro revenge - Atom" href="../../feeds/80596944534929391/comments/default" />
+<!--[if IE]><script type="text/javascript" src="https://www.blogger.com/static/v1/jsbin/4244862144-ieretrofit.js"></script>
+<![endif]-->
+<meta content='http://bwgypyth.blogspot.com/2013/03/initial-attempt-at-packet-analyzer.html' property='og:url'/>
+<meta content='Initial attempt at packet analyzer' property='og:title'/>
+<meta content='Our biggest issue right now is to understand how the packets are assembled when they are tranfered from and to the server. Our previous atte...' property='og:description'/>
+<!--[if IE]> <script> (function() { var html5 = ("abbr,article,aside,audio,canvas,datalist,details," + "figure,footer,header,hgroup,mark,menu,meter,nav,output," + "progress,section,time,video").split(','); for (var i = 0; i < html5.length; i++) { document.createElement(html5[i]); } try { document.execCommand('BackgroundImageCache', false, true); } catch(e) {} })(); </script> <![endif]-->
+<title>lotro revenge: Initial attempt at packet analyzer</title>
+<style id='page-skin-1' type='text/css'><!--
+/*
+-----------------------------------------------
+Blogger Template Style
+Name:     Simple
+Designer: Blogger
+URL:      www.blogger.com
+----------------------------------------------- */
+/* Content
+----------------------------------------------- */
+body {
+font: normal normal 12px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #222222;
+background: #66bbdd none repeat scroll top left;
+padding: 0 40px 40px 40px;
+}
+html body .region-inner {
+min-width: 0;
+max-width: 100%;
+width: auto;
+}
+h2 {
+font-size: 22px;
+}
+a:link {
+text-decoration:none;
+color: #2288bb;
+}
+a:visited {
+text-decoration:none;
+color: #888888;
+}
+a:hover {
+text-decoration:underline;
+color: #33aaff;
+}
+.body-fauxcolumn-outer .fauxcolumn-inner {
+background: transparent url(../../../resources.blogblog.com/blogblog/data/1kt/simple/body_gradient_tile_light.png) repeat scroll top left;
+_background-image: none;
+}
+.body-fauxcolumn-outer .cap-top {
+position: absolute;
+z-index: 1;
+height: 400px;
+width: 100%;
+}
+.body-fauxcolumn-outer .cap-top .cap-left {
+width: 100%;
+background: transparent url(../../../resources.blogblog.com/blogblog/data/1kt/simple/gradients_light.png) repeat-x scroll top left;
+_background-image: none;
+}
+.content-outer {
+-moz-box-shadow: 0 0 40px rgba(0, 0, 0, .15);
+-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+-goog-ms-box-shadow: 0 0 10px #333333;
+box-shadow: 0 0 40px rgba(0, 0, 0, .15);
+margin-bottom: 1px;
+}
+.content-inner {
+padding: 10px 10px;
+}
+.content-inner {
+background-color: #ffffff;
+}
+/* Header
+----------------------------------------------- */
+.header-outer {
+background: transparent none repeat-x scroll 0 -400px;
+_background-image: none;
+}
+.Header h1 {
+font: normal normal 60px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #3399bb;
+text-shadow: -1px -1px 1px rgba(0, 0, 0, .2);
+}
+.Header h1 a {
+color: #3399bb;
+}
+.Header .description {
+font-size: 140%;
+color: #777777;
+}
+.header-inner .Header .titlewrapper {
+padding: 22px 30px;
+}
+.header-inner .Header .descriptionwrapper {
+padding: 0 30px;
+}
+/* Tabs
+----------------------------------------------- */
+.tabs-inner .section:first-child {
+border-top: 1px solid #eeeeee;
+}
+.tabs-inner .section:first-child ul {
+margin-top: -1px;
+border-top: 1px solid #eeeeee;
+border-left: 0 solid #eeeeee;
+border-right: 0 solid #eeeeee;
+}
+.tabs-inner .widget ul {
+background: #f5f5f5 url(../../../resources.blogblog.com/blogblog/data/1kt/simple/gradients_light.png) repeat-x scroll 0 -800px;
+_background-image: none;
+border-bottom: 1px solid #eeeeee;
+margin-top: 0;
+margin-left: -30px;
+margin-right: -30px;
+}
+.tabs-inner .widget li a {
+display: inline-block;
+padding: .6em 1em;
+font: normal normal 14px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #999999;
+border-left: 1px solid #ffffff;
+border-right: 1px solid #eeeeee;
+}
+.tabs-inner .widget li:first-child a {
+border-left: none;
+}
+.tabs-inner .widget li.selected a, .tabs-inner .widget li a:hover {
+color: #000000;
+background-color: #eeeeee;
+text-decoration: none;
+}
+/* Columns
+----------------------------------------------- */
+.main-outer {
+border-top: 0 solid #eeeeee;
+}
+.fauxcolumn-left-outer .fauxcolumn-inner {
+border-right: 1px solid #eeeeee;
+}
+.fauxcolumn-right-outer .fauxcolumn-inner {
+border-left: 1px solid #eeeeee;
+}
+/* Headings
+----------------------------------------------- */
+div.widget > h2,
+div.widget h2.title {
+margin: 0 0 1em 0;
+font: normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #000000;
+}
+/* Widgets
+----------------------------------------------- */
+.widget .zippy {
+color: #999999;
+text-shadow: 2px 2px 1px rgba(0, 0, 0, .1);
+}
+.widget .popular-posts ul {
+list-style: none;
+}
+/* Posts
+----------------------------------------------- */
+h2.date-header {
+font: normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+}
+.date-header span {
+background-color: transparent;
+color: #222222;
+padding: inherit;
+letter-spacing: inherit;
+margin: inherit;
+}
+.main-inner {
+padding-top: 30px;
+padding-bottom: 30px;
+}
+.main-inner .column-center-inner {
+padding: 0 15px;
+}
+.main-inner .column-center-inner .section {
+margin: 0 15px;
+}
+.post {
+margin: 0 0 25px 0;
+}
+h3.post-title, .comments h4 {
+font: normal normal 22px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+margin: .75em 0 0;
+}
+.post-body {
+font-size: 110%;
+line-height: 1.4;
+position: relative;
+}
+.post-body img, .post-body .tr-caption-container, .Profile img, .Image img,
+.BlogList .item-thumbnail img {
+padding: 2px;
+background: #ffffff;
+border: 1px solid #eeeeee;
+-moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+}
+.post-body img, .post-body .tr-caption-container {
+padding: 5px;
+}
+.post-body .tr-caption-container {
+color: #222222;
+}
+.post-body .tr-caption-container img {
+padding: 0;
+background: transparent;
+border: none;
+-moz-box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+-webkit-box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+}
+.post-header {
+margin: 0 0 1.5em;
+line-height: 1.6;
+font-size: 90%;
+}
+.post-footer {
+margin: 20px -2px 0;
+padding: 5px 10px;
+color: #666666;
+background-color: #f9f9f9;
+border-bottom: 1px solid #eeeeee;
+line-height: 1.6;
+font-size: 90%;
+}
+#comments .comment-author {
+padding-top: 1.5em;
+border-top: 1px solid #eeeeee;
+background-position: 0 1.5em;
+}
+#comments .comment-author:first-child {
+padding-top: 0;
+border-top: none;
+}
+.avatar-image-container {
+margin: .2em 0 0;
+}
+#comments .avatar-image-container img {
+border: 1px solid #eeeeee;
+}
+/* Comments
+----------------------------------------------- */
+.comments .comments-content .icon.blog-author {
+background-repeat: no-repeat;
+background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9sLFwMeCjjhcOMAAAD+SURBVDjLtZSvTgNBEIe/WRRnm3U8RC1neQdsm1zSBIU9VVF1FkUguQQsD9ITmD7ECZIJSE4OZo9stoVjC/zc7ky+zH9hXwVwDpTAWWLrgS3QAe8AZgaAJI5zYAmc8r0G4AHYHQKVwII8PZrZFsBFkeRCABYiMh9BRUhnSkPTNCtVXYXURi1FpBDgArj8QU1eVXUzfnjv7yP7kwu1mYrkWlU33vs1QNu2qU8pwN0UpKoqokjWwCztrMuBhEhmh8bD5UDqur75asbcX0BGUB9/HAMB+r32hznJgXy2v0sGLBcyAJ1EK3LFcbo1s91JeLwAbwGYu7TP/3ZGfnXYPgAVNngtqatUNgAAAABJRU5ErkJggg==);
+}
+.comments .comments-content .loadmore a {
+border-top: 1px solid #999999;
+border-bottom: 1px solid #999999;
+}
+.comments .comment-thread.inline-thread {
+background-color: #f9f9f9;
+}
+.comments .continue {
+border-top: 2px solid #999999;
+}
+/* Accents
+---------------------------------------------- */
+.section-columns td.columns-cell {
+border-left: 1px solid #eeeeee;
+}
+.blog-pager {
+background: transparent none no-repeat scroll top center;
+}
+.blog-pager-older-link, .home-link,
+.blog-pager-newer-link {
+background-color: #ffffff;
+padding: 5px;
+}
+.footer-outer {
+border-top: 0 dashed #bbbbbb;
+}
+/* Mobile
+----------------------------------------------- */
+body.mobile  {
+background-size: auto;
+}
+.mobile .body-fauxcolumn-outer {
+background: transparent none repeat scroll top left;
+}
+.mobile .body-fauxcolumn-outer .cap-top {
+background-size: 100% auto;
+}
+.mobile .content-outer {
+-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+}
+.mobile .tabs-inner .widget ul {
+margin-left: 0;
+margin-right: 0;
+}
+.mobile .post {
+margin: 0;
+}
+.mobile .main-inner .column-center-inner .section {
+margin: 0;
+}
+.mobile .date-header span {
+padding: 0.1em 10px;
+margin: 0 -10px;
+}
+.mobile h3.post-title {
+margin: 0;
+}
+.mobile .blog-pager {
+background: transparent none no-repeat scroll top center;
+}
+.mobile .footer-outer {
+border-top: none;
+}
+.mobile .main-inner, .mobile .footer-inner {
+background-color: #ffffff;
+}
+.mobile-index-contents {
+color: #222222;
+}
+.mobile-link-button {
+background-color: #2288bb;
+}
+.mobile-link-button a:link, .mobile-link-button a:visited {
+color: #ffffff;
+}
+.mobile .tabs-inner .section:first-child {
+border-top: none;
+}
+.mobile .tabs-inner .PageList .widget-content {
+background-color: #eeeeee;
+color: #000000;
+border-top: 1px solid #eeeeee;
+border-bottom: 1px solid #eeeeee;
+}
+.mobile .tabs-inner .PageList .widget-content .pagelist-arrow {
+border-left: 1px solid #eeeeee;
+}
+
+--></style>
+<style id='template-skin-1' type='text/css'><!--
+body {
+min-width: 960px;
+}
+.content-outer, .content-fauxcolumn-outer, .region-inner {
+min-width: 960px;
+max-width: 960px;
+_width: 960px;
+}
+.main-inner .columns {
+padding-left: 0;
+padding-right: 310px;
+}
+.main-inner .fauxcolumn-center-outer {
+left: 0;
+right: 310px;
+/* IE6 does not respect left and right together */
+_width: expression(this.parentNode.offsetWidth -
+parseInt("0") -
+parseInt("310px") + 'px');
+}
+.main-inner .fauxcolumn-left-outer {
+width: 0;
+}
+.main-inner .fauxcolumn-right-outer {
+width: 310px;
+}
+.main-inner .column-left-outer {
+width: 0;
+right: 100%;
+margin-left: -0;
+}
+.main-inner .column-right-outer {
+width: 310px;
+margin-right: -310px;
+}
+#layout {
+min-width: 0;
+}
+#layout .content-outer {
+min-width: 0;
+width: 800px;
+}
+#layout .region-inner {
+min-width: 0;
+width: auto;
+}
+body#layout div.add_widget {
+padding: 8px;
+}
+body#layout div.add_widget a {
+margin-left: 32px;
+}
+--></style>
+<link href='../../../www.blogger.com/dyn-css/authorizationde36.css?targetBlogID=5998090735925918818&amp;zx=10b1f290-4e62-4c93-9781-c7579685fd39' media='none' onload='if(media!=&#39;all&#39;)media=&#39;all&#39;' rel='stylesheet'/><noscript><link href='../../../www.blogger.com/dyn-css/authorizationde36.css?targetBlogID=5998090735925918818&amp;zx=10b1f290-4e62-4c93-9781-c7579685fd39' rel='stylesheet'/></noscript>
+
+</head>
+<body class='loading variant-pale'>
+<div class='navbar section' id='navbar' name='Navbar'><div class='widget Navbar' data-version='1' id='Navbar1'><script type="text/javascript">
+    function setAttributeOnload(object, attribute, val) {
+      if(window.addEventListener) {
+        window.addEventListener('load',
+          function(){ object[attribute] = val; }, false);
+      } else {
+        window.attachEvent('onload', function(){ object[attribute] = val; });
+      }
+    }
+  </script>
+<div id="navbar-iframe-container"></div>
+<script type="text/javascript" src="../../../apis.google.com/js/plusone.js"></script>
+<script type="text/javascript">
+      gapi.load("gapi.iframes:gapi.iframes.style.bubble", function() {
+        if (gapi.iframes && gapi.iframes.getContext) {
+          gapi.iframes.getContext().openChild({
+              url: 'https://www.blogger.com/navbar.g?targetBlogID\x3d5998090735925918818\x26blogName\x3dlotro+revenge\x26publishMode\x3dPUBLISH_MODE_BLOGSPOT\x26navbarType\x3dLIGHT\x26layoutType\x3dLAYOUTS\x26searchRoot\x3dhttps://bwgypyth.blogspot.com/search\x26blogLocale\x3dde\x26v\x3d2\x26homepageUrl\x3dhttp://bwgypyth.blogspot.com/\x26targetPostID\x3d80596944534929391\x26blogPostOrPageUrl\x3dhttp://bwgypyth.blogspot.com/2013/03/initial-attempt-at-packet-analyzer.html\x26vt\x3d-7643609565005686156',
+              where: document.getElementById("navbar-iframe-container"),
+              id: "navbar-iframe"
+          });
+        }
+      });
+    </script><script type="text/javascript">
+(function() {
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.src = '../../../pagead2.googlesyndication.com/pagead/js/f.txt';
+var head = document.getElementsByTagName('head')[0];
+if (head) {
+head.appendChild(script);
+}})();
+</script>
+</div></div>
+<div class='body-fauxcolumns'>
+<div class='fauxcolumn-outer body-fauxcolumn-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<div class='content'>
+<div class='content-fauxcolumns'>
+<div class='fauxcolumn-outer content-fauxcolumn-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<div class='content-outer'>
+<div class='content-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left content-fauxborder-left'>
+<div class='fauxborder-right content-fauxborder-right'></div>
+<div class='content-inner'>
+<header>
+<div class='header-outer'>
+<div class='header-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left header-fauxborder-left'>
+<div class='fauxborder-right header-fauxborder-right'></div>
+<div class='region-inner header-inner'>
+<div class='header section' id='header' name='Header'><div class='widget Header' data-version='1' id='Header1'>
+<div id='header-inner'>
+<div class='titlewrapper'>
+<h1 class='title'>
+<a href='../../index.html'>
+lotro revenge
+</a>
+</h1>
+</div>
+<div class='descriptionwrapper'>
+<p class='description'><span>A blog about gathering internal information about LOTRO.</span></p>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+<div class='header-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</header>
+<div class='tabs-outer'>
+<div class='tabs-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left tabs-fauxborder-left'>
+<div class='fauxborder-right tabs-fauxborder-right'></div>
+<div class='region-inner tabs-inner'>
+<div class='tabs no-items section' id='crosscol' name='Spaltenübergreifend'></div>
+<div class='tabs no-items section' id='crosscol-overflow' name='Cross-Column 2'></div>
+</div>
+</div>
+<div class='tabs-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='main-outer'>
+<div class='main-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left main-fauxborder-left'>
+<div class='fauxborder-right main-fauxborder-right'></div>
+<div class='region-inner main-inner'>
+<div class='columns fauxcolumns'>
+<div class='fauxcolumn-outer fauxcolumn-center-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='fauxcolumn-outer fauxcolumn-left-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='fauxcolumn-outer fauxcolumn-right-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<!-- corrects IE6 width calculation -->
+<div class='columns-inner'>
+<div class='column-center-outer'>
+<div class='column-center-inner'>
+<div class='main section' id='main' name='Hauptbereich'><div class='widget Blog' data-version='1' id='Blog1'>
+<div class='blog-posts hfeed'>
+
+          <div class="date-outer">
+        
+<h2 class='date-header'><span>Samstag, 9. März 2013</span></h2>
+
+          <div class="date-posts">
+        
+<div class='post-outer'>
+<div class='post hentry uncustomized-post-template' itemprop='blogPost' itemscope='itemscope' itemtype='http://schema.org/BlogPosting'>
+<meta content='5998090735925918818' itemprop='blogId'/>
+<meta content='80596944534929391' itemprop='postId'/>
+<a name='80596944534929391'></a>
+<h3 class='post-title entry-title' itemprop='name'>
+Initial attempt at packet analyzer
+</h3>
+<div class='post-header'>
+<div class='post-header-line-1'></div>
+</div>
+<div class='post-body entry-content' id='post-body-80596944534929391' itemprop='description articleBody'>
+Our biggest issue right now is to understand how the packets are assembled when they are tranfered from and to the server. Our previous attempt was to document the packets within an LibreOffice document hosted in our git repository. Sadly this does not work very well and especially does not scale. Only one developer can work on the document at a time.<br />
+<br />
+Starting today we are working on a small web based packet analyzer. Right now it is capable of displaying a single annotated packet taken from our current documentation, which is a rather limited functionality. We are working on creating a server backend to store annotated packets so everyone can collaborate and either annotate packets or give feedback to annotated packets. You can take a very brief preview at&nbsp; the following URL:<br />
+<br />
+<a href="https://gitorious.org/lotro/lotro-analyzer/blobs/raw/master/packet.html">https://gitorious.org/lotro/lotro-analyzer/blobs/raw/92df3298baa914602354df7501ea493e305851ca/packet.html</a><br />
+<br />
+Note: The code is currently tested in Google Chrome, Firefox and Internet Explorer. 
+<div style='clear: both;'></div>
+</div>
+<div class='post-footer'>
+<div class='post-footer-line post-footer-line-1'>
+<span class='post-author vcard'>
+Eingestellt von
+<span class='fn' itemprop='author' itemscope='itemscope' itemtype='http://schema.org/Person'>
+<meta content='https://www.blogger.com/profile/05117736107025149323' itemprop='url'/>
+<a class='g-profile' href='https://www.blogger.com/profile/05117736107025149323' rel='author' title='author profile'>
+<span itemprop='name'>bwgypyth</span>
+</a>
+</span>
+</span>
+<span class='post-timestamp'>
+um
+<meta content='http://bwgypyth.blogspot.com/2013/03/initial-attempt-at-packet-analyzer.html' itemprop='url'/>
+<a class='timestamp-link' href='initial-attempt-at-packet-analyzer.html' rel='bookmark' title='permanent link'><abbr class='published' itemprop='datePublished' title='2013-03-09T07:32:00-08:00'>07:32</abbr></a>
+</span>
+<span class='reaction-buttons'>
+</span>
+<span class='post-comment-link'>
+</span>
+<span class='post-icons'>
+<span class='item-control blog-admin pid-957954180'>
+<a href='https://www.blogger.com/post-edit.g?blogID=5998090735925918818&amp;postID=80596944534929391&amp;from=pencil' title='Post bearbeiten'>
+<img alt='' class='icon-action' height='18' src='../../../resources.blogblog.com/img/icon18_edit_allbkg.gif' width='18'/>
+</a>
+</span>
+</span>
+<div class='post-share-buttons goog-inline-block'>
+</div>
+</div>
+<div class='post-footer-line post-footer-line-2'>
+<span class='post-labels'>
+</span>
+</div>
+<div class='post-footer-line post-footer-line-3'>
+<span class='post-location'>
+</span>
+</div>
+</div>
+</div>
+<div class='comments' id='comments'>
+<a name='comments'></a>
+<h4> Kommentare:</h4>
+<div class='comments-content'>
+<script async='async' src='#' type='text/javascript'></script>
+<script type='text/javascript'>
+    (function() {
+      var items = null;
+      var msgs = null;
+      var config = {};
+
+// <![CDATA[
+      var cursor = null;
+      if (items && items.length > 0) {
+        cursor = parseInt(items[items.length - 1].timestamp) + 1;
+      }
+
+      var bodyFromEntry = function(entry) {
+        var text = (entry &&
+                    ((entry.content && entry.content.$t) ||
+                     (entry.summary && entry.summary.$t))) ||
+            '';
+        if (entry && entry.gd$extendedProperty) {
+          for (var k in entry.gd$extendedProperty) {
+            if (entry.gd$extendedProperty[k].name == 'blogger.contentRemoved') {
+              return '<span class="deleted-comment">' + text + '</span>';
+            }
+          }
+        }
+        return text;
+      }
+
+      var parse = function(data) {
+        cursor = null;
+        var comments = [];
+        if (data && data.feed && data.feed.entry) {
+          for (var i = 0, entry; entry = data.feed.entry[i]; i++) {
+            var comment = {};
+            // comment ID, parsed out of the original id format
+            var id = /blog-(\d+).post-(\d+)/.exec(entry.id.$t);
+            comment.id = id ? id[2] : null;
+            comment.body = bodyFromEntry(entry);
+            comment.timestamp = Date.parse(entry.published.$t) + '';
+            if (entry.author && entry.author.constructor === Array) {
+              var auth = entry.author[0];
+              if (auth) {
+                comment.author = {
+                  name: (auth.name ? auth.name.$t : undefined),
+                  profileUrl: (auth.uri ? auth.uri.$t : undefined),
+                  avatarUrl: (auth.gd$image ? auth.gd$image.src : undefined)
+                };
+              }
+            }
+            if (entry.link) {
+              if (entry.link[2]) {
+                comment.link = comment.permalink = entry.link[2].href;
+              }
+              if (entry.link[3]) {
+                var pid = /.*comments\/default\/(\d+)\?.*/.exec(entry.link[3].href);
+                if (pid && pid[1]) {
+                  comment.parentId = pid[1];
+                }
+              }
+            }
+            comment.deleteclass = 'item-control blog-admin';
+            if (entry.gd$extendedProperty) {
+              for (var k in entry.gd$extendedProperty) {
+                if (entry.gd$extendedProperty[k].name == 'blogger.itemClass') {
+                  comment.deleteclass += ' ' + entry.gd$extendedProperty[k].value;
+                } else if (entry.gd$extendedProperty[k].name == 'blogger.displayTime') {
+                  comment.displayTime = entry.gd$extendedProperty[k].value;
+                }
+              }
+            }
+            comments.push(comment);
+          }
+        }
+        return comments;
+      };
+
+      var paginator = function(callback) {
+        if (hasMore()) {
+          var url = config.feed + '?alt=json&v=2&orderby=published&reverse=false&max-results=50';
+          if (cursor) {
+            url += '&published-min=' + new Date(cursor).toISOString();
+          }
+          window.bloggercomments = function(data) {
+            var parsed = parse(data);
+            cursor = parsed.length < 50 ? null
+                : parseInt(parsed[parsed.length - 1].timestamp) + 1
+            callback(parsed);
+            window.bloggercomments = null;
+          }
+          url += '&callback=bloggercomments';
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.src = url;
+          document.getElementsByTagName('head')[0].appendChild(script);
+        }
+      };
+      var hasMore = function() {
+        return !!cursor;
+      };
+      var getMeta = function(key, comment) {
+        if ('iswriter' == key) {
+          var matches = !!comment.author
+              && comment.author.name == config.authorName
+              && comment.author.profileUrl == config.authorUrl;
+          return matches ? 'true' : '';
+        } else if ('deletelink' == key) {
+          return config.baseUri + '/delete-comment.g?blogID='
+               + config.blogId + '&postID=' + comment.id;
+        } else if ('deleteclass' == key) {
+          return comment.deleteclass;
+        }
+        return '';
+      };
+
+      var replybox = null;
+      var replyUrlParts = null;
+      var replyParent = undefined;
+
+      var onReply = function(commentId, domId) {
+        if (replybox == null) {
+          // lazily cache replybox, and adjust to suit this style:
+          replybox = document.getElementById('comment-editor');
+          if (replybox != null) {
+            replybox.height = '250px';
+            replybox.style.display = 'block';
+            replyUrlParts = replybox.src.split('#');
+          }
+        }
+        if (replybox && (commentId !== replyParent)) {
+          replybox.src = '';
+          document.getElementById(domId).insertBefore(replybox, null);
+          replybox.src = replyUrlParts[0]
+              + (commentId ? '&parentID=' + commentId : '')
+              + '#' + replyUrlParts[1];
+          replyParent = commentId;
+        }
+      };
+
+      var hash = (window.location.hash || '#').substring(1);
+      var startThread, targetComment;
+      if (/^comment-form_/.test(hash)) {
+        startThread = hash.substring('comment-form_'.length);
+      } else if (/^c[0-9]+$/.test(hash)) {
+        targetComment = hash.substring(1);
+      }
+
+      // Configure commenting API:
+      var configJso = {
+        'maxDepth': config.maxThreadDepth
+      };
+      var provider = {
+        'id': config.postId,
+        'data': items,
+        'loadNext': paginator,
+        'hasMore': hasMore,
+        'getMeta': getMeta,
+        'onReply': onReply,
+        'rendered': true,
+        'initComment': targetComment,
+        'initReplyThread': startThread,
+        'config': configJso,
+        'messages': msgs
+      };
+
+      var render = function() {
+        if (window.goog && window.goog.comments) {
+          var holder = document.getElementById('comment-holder');
+          window.goog.comments.render(holder, provider);
+        }
+      };
+
+      // render now, or queue to render when library loads:
+      if (window.goog && window.goog.comments) {
+        render();
+      } else {
+        window.goog = window.goog || {};
+        window.goog.comments = window.goog.comments || {};
+        window.goog.comments.loadQueue = window.goog.comments.loadQueue || [];
+        window.goog.comments.loadQueue.push(render);
+      }
+    })();
+// ]]>
+  </script>
+<div id='comment-holder'>
+<div class="comment-thread toplevel-thread"><ol id="top-ra"><li class="comment" id="c8904583209654778326"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="initial-attempt-at-packet-analyzeraf8d.html?showComment=1363096584750#c8904583209654778326">12. März 2013 um 06:56</a></span></div><p class="comment-content">colorful :D</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="8904583209654778326">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=8904583209654778326">Löschen</a></span></span></div><div class="comment-replies"><div id="c8904583209654778326-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c8904583209654778326-ra" class="thread-chrome thread-expanded"><div></div><div id="c8904583209654778326-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="8904583209654778326">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c8904583209654778326-ce"></div></li><li class="comment" id="c4920682272166968565"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="initial-attempt-at-packet-analyzere4ef.html?showComment=1363104796350#c4920682272166968565">12. März 2013 um 09:13</a></span></div><p class="comment-content">Very well, this is a good idea. But there is a little mistake: 0x00 0x61 is length/size of payload data. The first 0x00 0x00 will fall apart, when session with server is inizialized, so that every header&#39;s length is 20 bytes. So the green part 0x00 0x01 0x00 0x00 is the &quot;action&quot;-indicator, where 0x00 0x01 0x00 0x00 means session init request from client side, 0x00 0x04 0x00 0x00 then the server response on this and finally the client confirms with 0x00 0x08 0x00 0x00.<br><br>Now, only more people have to look at this blog ;-)</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="4920682272166968565">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=4920682272166968565">Löschen</a></span></span></div><div class="comment-replies"><div id="c4920682272166968565-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c4920682272166968565-ra" class="thread-chrome thread-expanded"><div></div><div id="c4920682272166968565-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="4920682272166968565">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c4920682272166968565-ce"></div></li><li class="comment" id="c8756203898944487931"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="initial-attempt-at-packet-analyzer3612.html?showComment=1363352392424#c8756203898944487931">15. März 2013 um 05:59</a></span></div><p class="comment-content">Just sent you the latest .exe version of the server. Client no keeps running the whole time. No patched client needed. You&#39;ll get til chara selection screen. Feel free to release it.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="8756203898944487931">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=8756203898944487931">Löschen</a></span></span></div><div class="comment-replies"><div id="c8756203898944487931-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c8756203898944487931-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c4954497669729542703"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonymous</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="initial-attempt-at-packet-analyzere859.html?showComment=1363374907414#c4954497669729542703">15. März 2013 um 12:15</a></span></div><p class="comment-content">good progress!</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=4954497669729542703">Löschen</a></span></span></div><div class="comment-replies"><div id="c4954497669729542703-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c4954497669729542703-ra" class="thread-chrome thread-expanded"><div></div><div id="c4954497669729542703-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="4954497669729542703">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c4954497669729542703-ce"></div></li><li class="comment" id="c7833302316512327212"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/05117736107025149323" rel="nofollow">bwgypyth</a></cite><span class="icon user blog-author"></span><span class="datetime secondary-text"><a rel="nofollow" href="initial-attempt-at-packet-analyzera4be.html?showComment=1363417984409#c7833302316512327212">16. März 2013 um 00:13</a></span></div><p class="comment-content">I got the server. Sadly my virus scanner didn&#39;t like it and I had a hard time getting it to my system. That&#39;s also the reason I haven&#39;t run it yet and I&#39;m currently unsure if I&#39;ll release it. But it might as well be a false alarm of my virus scanner. I&#39;ll find out during this weekend.<br><br>Next to that you can always dump your current code on me. Most people just want a binary to run the server, but to me code is much better because I want to understand how it works :-)<br><br>Anyway thanks for your help! It is really appreciated!</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-957954180"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=7833302316512327212">Löschen</a></span></span></div><div class="comment-replies"><div id="c7833302316512327212-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c7833302316512327212-ra" class="thread-chrome thread-expanded"><div></div><div id="c7833302316512327212-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="7833302316512327212">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c7833302316512327212-ce"></div></li></div><div id="c8756203898944487931-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="8756203898944487931">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c8756203898944487931-ce"></div></li><li class="comment" id="c6845822935793942110"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="initial-attempt-at-packet-analyzerc77c.html?showComment=1363441475677#c6845822935793942110">16. März 2013 um 06:44</a></span></div><p class="comment-content">Mhmhm, thats strange. I only modified the helper.dll, that it couldn&#39;t be reversed easily (because of the checksum parts) Does the scanner complians about the .exe? Inside the exe there are only the routines to start server from server.dll, nothing more. I don&#39;t know if the &quot;unsecure&quot; anon mail service changes files inside .zip&#39;s. They could inject a virus with ease.<br><br><br>-T-<br>So my reason for the .exe release is that everyone, especially non-programmers can figure out things on character creation. A source code which isn&#39;t a .exe can&#39;t be compiled from people who have no understanding in programming without installing the developer environment and so on...<br><br>I&#39;m self not 100% shure how the original server could work. I&#39;m only guessing, so my source code would not be optimal.<br><br>Call the .exe in a virtual host environment, than you can be shure that no virus will harm your system. The server runs without changes on mono/linux when i compile the source with sharp developer.<br><br>But ok, will send you the source in the next days. I&#39;m modifying it, so that it loads an default chara from file, where you can change the values and see what happens.<br><br>-T-</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="6845822935793942110">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=6845822935793942110">Löschen</a></span></span></div><div class="comment-replies"><div id="c6845822935793942110-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c6845822935793942110-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c8573244036217249180"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/05117736107025149323" rel="nofollow">bwgypyth</a></cite><span class="icon user blog-author"></span><span class="datetime secondary-text"><a rel="nofollow" href="initial-attempt-at-packet-analyzerc22c.html?showComment=1363511563840#c8573244036217249180">17. März 2013 um 02:12</a></span></div><p class="comment-content">I guess my virus scanner just was scared of an exe within a zip file. I tried the server last night and I was able to dump some packets. Then I was able to simply copy content of the packet file into the upload of my analyzer and play with it. Worked like a charm :-)<br><br>Next to that: Don&#39;t worry about your source code. First of all we are prototyping right now. Almost everything is a hack when you start to write something that will become a large program. That&#39;s just a fact. If you are doing reverse engineering (or doing anything where you don&#39;t know where you are heading) it will just be more chaos. It&#39;s the nature of coding :-)<br><br>I&#39;m a professional programmer for 15 years for different companies. I&#39;ve seen code that has been in production for years that was so horrifying you get nightmares of :-D The code I&#39;ve seen from you is totally fine. It works great, doesn&#39;t crash randomly and produces reproducible results. That&#39;s all I&#39;d expect at this early stage :-) So your code is nothing to be ashamed of. Just don&#39;t worry about it&#39;s quality.<br><br>If you are adding stuff you can look at the modifications I made to your source code. I added a few things that might be needed for loading the character from an XML file.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-957954180"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=8573244036217249180">Löschen</a></span></span></div><div class="comment-replies"><div id="c8573244036217249180-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c8573244036217249180-ra" class="thread-chrome thread-expanded"><div></div><div id="c8573244036217249180-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="8573244036217249180">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c8573244036217249180-ce"></div></li></div><div id="c6845822935793942110-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6845822935793942110">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c6845822935793942110-ce"></div></li><li class="comment" id="c8670944021841897175"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="initial-attempt-at-packet-analyzerc39f.html?showComment=1363444048546#c8670944021841897175">16. März 2013 um 07:27</a></span></div><p class="comment-content">The crc32 from LOTROServer.zip is 19c87504. If it&#39;s not so, than it&#39;s definitly modified. Boah, i have to learn to write better in english, just took a look at my previous post...<br><br>So again, i will send you the source when i have rewritten some of the packet parsing parts. i am not happy with this kind of object parsing. My last runs showed me, that packets could drop to fast, even if i&#39;m in a local network. if you would run it over internet, than there would be more loss. It happened to me that only one packet was missing and the client crashed with an exception. If the homebrew server has resend it like requested from client, this fatal mistake wouldn&#39;t happen. It&#39;s a long way before the &quot;architecture&quot; is working like it should.<br><br>-T-</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="8670944021841897175">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=8670944021841897175">Löschen</a></span></span></div><div class="comment-replies"><div id="c8670944021841897175-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c8670944021841897175-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c3746228010624841639"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/05117736107025149323" rel="nofollow">bwgypyth</a></cite><span class="icon user blog-author"></span><span class="datetime secondary-text"><a rel="nofollow" href="initial-attempt-at-packet-analyzer3500.html?showComment=1363511959664#c3746228010624841639">17. März 2013 um 02:19</a></span></div><p class="comment-content">The CRC32 is fine. Next to that: Wenn Englisch zu kompliziert ist, können wir uns auch auf Deutsch unterhalten. Ich bevorzuge nur Englisch, damit alle es verstehen.<br><br>Regarding the crashes: I haven&#39;t seen one of them so far. No idea why. I tested the latest lotro-client on Windows 7 x64 and didn&#39;t get it to crash it. Strange.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-957954180"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=3746228010624841639">Löschen</a></span></span></div><div class="comment-replies"><div id="c3746228010624841639-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c3746228010624841639-ra" class="thread-chrome thread-expanded"><div></div><div id="c3746228010624841639-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3746228010624841639">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c3746228010624841639-ce"></div></li></div><div id="c8670944021841897175-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="8670944021841897175">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c8670944021841897175-ce"></div></li><li class="comment" id="c5476150772092814773"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="initial-attempt-at-packet-analyzerc5ec.html?showComment=1363521640472#c5476150772092814773">17. März 2013 um 05:00</a></span></div><p class="comment-content">I&#39;ll think it&#39;s because of threading sometimes. I&#39;ve made some static classes (as singleton pattern, helper and sessionhandler), they maybe not thread safe. Yesterday i took a look at the joining world packets. They are a little bit complicater than the charagen packets.<br><br>I also wrote down some answer packets, when you use an illegal character name. There are many different cases, where only one byte changes. I tried to find equalities between them and the client_locale.dat, but no success. The worst case will be, run the client for 256 times and write down what happens... :-/</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="5476150772092814773">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=5476150772092814773">Löschen</a></span></span></div><div class="comment-replies"><div id="c5476150772092814773-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c5476150772092814773-ra" class="thread-chrome thread-expanded"><div></div><div id="c5476150772092814773-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="5476150772092814773">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c5476150772092814773-ce"></div></li></ol><div id="top-continue" class="continue"><a class="comment-reply" target="_self">Kommentar hinzufügen</a></div><div class="comment-replybox-thread" id="top-ce"></div><div class="loadmore hidden" data-post-id="80596944534929391"><a target="_self">Weitere laden...</a></div></div>
+</div>
+</div>
+<p class='comment-footer'>
+<div class='comment-form'>
+<a name='comment-form'></a>
+<p>
+</p>
+<a href='https://www.blogger.com/comment-iframe.g?blogID=5998090735925918818&amp;postID=80596944534929391' id='comment-editor-src'></a>
+<iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' frameborder='0' height='410px' id='comment-editor' name='comment-editor' src='#' width='100%'></iframe>
+<script src='../../../www.blogger.com/static/v1/jsbin/1068921344-comment_from_post_iframe.js' type='text/javascript'></script>
+<script type='text/javascript'>
+      BLOG_CMT_createIframe('https://www.blogger.com/rpc_relay.html');
+    </script>
+</div>
+</p>
+<div id='backlinks-container'>
+<div id='Blog1_backlinks-container'>
+</div>
+</div>
+</div>
+</div>
+
+        </div></div>
+      
+</div>
+<div class='blog-pager' id='blog-pager'>
+<span id='blog-pager-newer-link'>
+<a class='blog-pager-newer-link' href='improving-packet-analyzer.html' id='Blog1_blog-pager-newer-link' title='Neuerer Post'>Neuerer Post</a>
+</span>
+<span id='blog-pager-older-link'>
+<a class='blog-pager-older-link' href='updates-investigation-documents-and.html' id='Blog1_blog-pager-older-link' title='Älterer Post'>Älterer Post</a>
+</span>
+<a class='home-link' href='../../index.html'>Startseite</a>
+</div>
+<div class='clear'></div>
+<div class='post-feeds'>
+<div class='feed-links'>
+Abonnieren
+<a class='feed-link' href='../../feeds/80596944534929391/comments/default' target='_blank' type='application/atom+xml'>Kommentare zum Post (Atom)</a>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+<div class='column-left-outer'>
+<div class='column-left-inner'>
+<aside>
+</aside>
+</div>
+</div>
+<div class='column-right-outer'>
+<div class='column-right-inner'>
+<aside>
+<div class='sidebar section' id='sidebar-right-1'><div class='widget BlogArchive' data-version='1' id='BlogArchive2'>
+<h2>Blog-Archiv</h2>
+<div class='widget-content'>
+<div id='ArchiveList'>
+<div id='BlogArchive2_ArchiveList'>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2016/index.html'>
+2016
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2016/11/index.html'>
+November
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2016/10/index.html'>
+Oktober
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2015/index.html'>
+2015
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2015/04/index.html'>
+April
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2014/index.html'>
+2014
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2014/06/index.html'>
+Juni
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>
+
+        &#9660;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../index.html'>
+2013
+</a>
+<span class='post-count' dir='ltr'>(11)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../10/index.html'>
+Oktober
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../09/index.html'>
+September
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>
+
+        &#9660;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='index.html'>
+März
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+<ul class='posts'>
+<li><a href='regarding-encrypted-and-unencrypted.html'>Regarding encrypted and unencrypted packets</a></li>
+<li><a href='improving-communication-using-irc.html'>Improving communication using IRC</a></li>
+<li><a href='new-server-code-uploaded.html'>New server code uploaded</a></li>
+<li><a href='analyzing-character-creation.html'>Analyzing the character creation</a></li>
+<li><a href='improving-packet-analyzer.html'>Improving the packet analyzer</a></li>
+<li><a href='initial-attempt-at-packet-analyzer.html'>Initial attempt at packet analyzer</a></li>
+<li><a href='updates-investigation-documents-and.html'>Updates investigation documents and server code pu...</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2012/index.html'>
+2012
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2012/07/index.html'>
+Juli
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2012/03/index.html'>
+März
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2011/index.html'>
+2011
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2011/12/index.html'>
+Dezember
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2010/index.html'>
+2010
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2010/10/index.html'>
+Oktober
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2010/04/index.html'>
+April
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2010/01/index.html'>
+Januar
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/index.html'>
+2009
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/12/index.html'>
+Dezember
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/07/index.html'>
+Juli
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/02/index.html'>
+Februar
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/01/index.html'>
+Januar
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=5998090735925918818&amp;widgetType=BlogArchive&amp;widgetId=BlogArchive2&amp;action=editWidget&amp;sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("BlogArchive2"));' rel='nofollow' target='configBlogArchive2' title='Bearbeiten'>
+<img alt='' height='18' src='../../../resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div></div>
+<table border='0' cellpadding='0' cellspacing='0' class='section-columns columns-2'>
+<tbody>
+<tr>
+<td class='first columns-cell'>
+<div class='sidebar no-items section' id='sidebar-right-2-1'></div>
+</td>
+<td class='columns-cell'>
+<div class='sidebar no-items section' id='sidebar-right-2-2'></div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class='sidebar no-items section' id='sidebar-right-3'></div>
+</aside>
+</div>
+</div>
+</div>
+<div style='clear: both'></div>
+<!-- columns -->
+</div>
+<!-- main -->
+</div>
+</div>
+<div class='main-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<footer>
+<div class='footer-outer'>
+<div class='footer-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left footer-fauxborder-left'>
+<div class='fauxborder-right footer-fauxborder-right'></div>
+<div class='region-inner footer-inner'>
+<div class='foot no-items section' id='footer-1'></div>
+<table border='0' cellpadding='0' cellspacing='0' class='section-columns columns-2'>
+<tbody>
+<tr>
+<td class='first columns-cell'>
+<div class='foot no-items section' id='footer-2-1'></div>
+</td>
+<td class='columns-cell'>
+<div class='foot no-items section' id='footer-2-2'></div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- outside of the include in order to lock Attribution widget -->
+<div class='foot section' id='footer-3' name='Footer'><div class='widget Attribution' data-version='1' id='Attribution1'>
+<div class='widget-content' style='text-align: center;'>
+Design "Einfach". Powered by <a href='https://www.blogger.com/' target='_blank'>Blogger</a>.
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=5998090735925918818&amp;widgetType=Attribution&amp;widgetId=Attribution1&amp;action=editWidget&amp;sectionId=footer-3' onclick='return _WidgetManager._PopupConfig(document.getElementById("Attribution1"));' rel='nofollow' target='configAttribution1' title='Bearbeiten'>
+<img alt='' height='18' src='../../../resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div></div>
+</div>
+</div>
+<div class='footer-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</footer>
+<!-- content -->
+</div>
+</div>
+<div class='content-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<script type='text/javascript'>
+    window.setTimeout(function() {
+        document.body.className = document.body.className.replace('loading', '');
+      }, 10);
+  </script>
+
+<script type="text/javascript" src="../../../www.blogger.com/static/v1/widgets/389203291-widgets.js"></script>
+<script type='text/javascript'>
+window['__wavt'] = 'AOuZoY5EadZmkjQkjfPFUX-cA9lPYkVLKw:1602195108317';_WidgetManager._Init('//www.blogger.com/rearrange?blogID\x3d5998090735925918818','initial-attempt-at-packet-analyzer.html','5998090735925918818');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'blogId': '5998090735925918818', 'title': 'lotro revenge', 'url': 'http://bwgypyth.blogspot.com/2013/03/initial-attempt-at-packet-analyzer.html', 'canonicalUrl': 'http://bwgypyth.blogspot.com/2013/03/initial-attempt-at-packet-analyzer.html', 'homepageUrl': 'http://bwgypyth.blogspot.com/', 'searchUrl': 'http://bwgypyth.blogspot.com/search', 'canonicalHomepageUrl': 'http://bwgypyth.blogspot.com/', 'blogspotFaviconUrl': 'http://bwgypyth.blogspot.com/favicon.ico', 'bloggerUrl': 'https://www.blogger.com', 'hasCustomDomain': false, 'httpsEnabled': true, 'enabledCommentProfileImages': true, 'gPlusViewType': 'FILTERED_POSTMOD', 'adultContent': false, 'analyticsAccountNumber': '', 'encoding': 'UTF-8', 'locale': 'de', 'localeUnderscoreDelimited': 'de', 'languageDirection': 'ltr', 'isPrivate': false, 'isMobile': false, 'isMobileRequest': false, 'mobileClass': '', 'isPrivateBlog': false, 'isDynamicViewsAvailable': true, 'feedLinks': '\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22lotro revenge - Atom\x22 href\x3d\x22http://bwgypyth.blogspot.com/feeds/posts/default\x22 /\x3e\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/rss+xml\x22 title\x3d\x22lotro revenge - RSS\x22 href\x3d\x22http://bwgypyth.blogspot.com/feeds/posts/default?alt\x3drss\x22 /\x3e\n\x3clink rel\x3d\x22service.post\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22lotro revenge - Atom\x22 href\x3d\x22https://www.blogger.com/feeds/5998090735925918818/posts/default\x22 /\x3e\n\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22lotro revenge - Atom\x22 href\x3d\x22http://bwgypyth.blogspot.com/feeds/80596944534929391/comments/default\x22 /\x3e\n', 'meTag': '', 'adsenseHostId': 'ca-host-pub-1556223355139109', 'adsenseHasAds': false, 'ieCssRetrofitLinks': '\x3c!--[if IE]\x3e\x3cscript type\x3d\x22text/javascript\x22 src\x3d\x22https://www.blogger.com/static/v1/jsbin/4244862144-ieretrofit.js\x22\x3e\x3c/script\x3e\n\x3c![endif]--\x3e', 'view': '', 'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/4224c15c4e7c9321/js/comments.js', 'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/e935819f51c62627', 'plusOneApiSrc': 'https://apis.google.com/js/plusone.js', 'disableGComments': true, 'sharing': {'platforms': [{'name': 'Link abrufen', 'key': 'link', 'shareMessage': 'Link abrufen', 'target': ''}, {'name': 'Facebook', 'key': 'facebook', 'shareMessage': 'Über Facebook teilen', 'target': 'facebook'}, {'name': 'BlogThis!', 'key': 'blogThis', 'shareMessage': 'BlogThis!', 'target': 'blog'}, {'name': 'Twitter', 'key': 'twitter', 'shareMessage': 'Über Twitter teilen', 'target': 'twitter'}, {'name': 'Pinterest', 'key': 'pinterest', 'shareMessage': 'Über Pinterest teilen', 'target': 'pinterest'}, {'name': 'E-Mail', 'key': 'email', 'shareMessage': 'E-Mail', 'target': 'email'}], 'disableGooglePlus': true, 'googlePlusShareButtonWidth': 300, 'googlePlusBootstrap': '\x3cscript type\x3d\x22text/javascript\x22\x3ewindow.___gcfg \x3d {\x27lang\x27: \x27de\x27};\x3c/script\x3e'}, 'hasCustomJumpLinkMessage': false, 'jumpLinkMessage': 'Mehr anzeigen', 'pageType': 'item', 'postId': '80596944534929391', 'pageName': 'Initial attempt at packet analyzer', 'pageTitle': 'lotro revenge: Initial attempt at packet analyzer'}}, {'name': 'features', 'data': {'sharing_get_link_dialog': 'true', 'sharing_native': 'false'}}, {'name': 'messages', 'data': {'edit': 'Bearbeiten', 'linkCopiedToClipboard': 'Link in Zwischenablage kopiert.', 'ok': 'OK', 'postLink': 'Link zum Post'}}, {'name': 'template', 'data': {'name': 'Simple', 'localizedName': 'Einfach', 'isResponsive': false, 'isAlternateRendering': false, 'isCustom': false, 'variant': 'pale', 'variantId': 'pale'}}, {'name': 'view', 'data': {'classic': {'name': 'classic', 'url': '?view\x3dclassic'}, 'flipcard': {'name': 'flipcard', 'url': '?view\x3dflipcard'}, 'magazine': {'name': 'magazine', 'url': '?view\x3dmagazine'}, 'mosaic': {'name': 'mosaic', 'url': '?view\x3dmosaic'}, 'sidebar': {'name': 'sidebar', 'url': '?view\x3dsidebar'}, 'snapshot': {'name': 'snapshot', 'url': '?view\x3dsnapshot'}, 'timeslide': {'name': 'timeslide', 'url': '?view\x3dtimeslide'}, 'isMobile': false, 'title': 'Initial attempt at packet analyzer', 'description': 'Our biggest issue right now is to understand how the packets are assembled when they are tranfered from and to the server. Our previous atte...', 'url': 'http://bwgypyth.blogspot.com/2013/03/initial-attempt-at-packet-analyzer.html', 'type': 'item', 'isSingleItem': true, 'isMultipleItems': false, 'isError': false, 'isPage': false, 'isPost': true, 'isHomepage': false, 'isArchive': false, 'isLabelSearch': false, 'postId': 80596944534929391}}]);
+_WidgetManager._RegisterWidget('_NavbarView', new _WidgetInfo('Navbar1', 'navbar', document.getElementById('Navbar1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'header', document.getElementById('Header1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'lightboxEnabled': true, 'lightboxModuleUrl': 'https://www.blogger.com/static/v1/jsbin/3554439735-lbx__de.js', 'lightboxCssUrl': 'https://www.blogger.com/static/v1/v-css/368954415-lightbox_bundle.css'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogArchiveView', new _WidgetInfo('BlogArchive2', 'sidebar-right-1', document.getElementById('BlogArchive2'), {'languageDirection': 'ltr', 'loadingMessage': 'Wird geladen\x26hellip;'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_AttributionView', new _WidgetInfo('Attribution1', 'footer-3', document.getElementById('Attribution1'), {}, 'displayModeFull'));
+</script>
+</body>
+
+<!-- Mirrored from bwgypyth.blogspot.com/2013/03/initial-attempt-at-packet-analyzer.html?showComment=1363417984409 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Oct 2020 22:13:30 GMT -->
+</html>

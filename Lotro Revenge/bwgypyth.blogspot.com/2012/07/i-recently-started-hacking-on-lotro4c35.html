@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html class='v2' dir='ltr' lang='de'>
+
+<!-- Mirrored from bwgypyth.blogspot.com/2012/07/i-recently-started-hacking-on-lotro.html?showComment=1418725902353 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Oct 2020 22:13:36 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<link href='../../../www.blogger.com/static/v1/widgets/3416767676-css_bundle_v2.css' rel='stylesheet' type='text/css'/>
+<meta content='width=1100' name='viewport'/>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+<meta content='blogger' name='generator'/>
+<link href='../../favicon.ico' rel='icon' type='image/x-icon'/>
+<link href='i-recently-started-hacking-on-lotro.html' rel='canonical'/>
+<link rel="alternate" type="application/atom+xml" title="lotro revenge - Atom" href="../../feeds/posts/default" />
+<link rel="alternate" type="application/rss+xml" title="lotro revenge - RSS" href="../../feeds/posts/default9522?alt=rss" />
+<link rel="service.post" type="application/atom+xml" title="lotro revenge - Atom" href="https://www.blogger.com/feeds/5998090735925918818/posts/default" />
+
+<link rel="alternate" type="application/atom+xml" title="lotro revenge - Atom" href="../../feeds/3653141589936136182/comments/default" />
+<!--[if IE]><script type="text/javascript" src="https://www.blogger.com/static/v1/jsbin/4244862144-ieretrofit.js"></script>
+<![endif]-->
+<meta content='http://bwgypyth.blogspot.com/2012/07/i-recently-started-hacking-on-lotro.html' property='og:url'/>
+<meta content='Revamping the work' property='og:title'/>
+<meta content='I recently started hacking on lotro again, trying to figure out the checksumming. Right now I fail to understand how it works, eve hough tAm...' property='og:description'/>
+<!--[if IE]> <script> (function() { var html5 = ("abbr,article,aside,audio,canvas,datalist,details," + "figure,footer,header,hgroup,mark,menu,meter,nav,output," + "progress,section,time,video").split(','); for (var i = 0; i < html5.length; i++) { document.createElement(html5[i]); } try { document.execCommand('BackgroundImageCache', false, true); } catch(e) {} })(); </script> <![endif]-->
+<title>lotro revenge: Revamping the work</title>
+<style id='page-skin-1' type='text/css'><!--
+/*
+-----------------------------------------------
+Blogger Template Style
+Name:     Simple
+Designer: Blogger
+URL:      www.blogger.com
+----------------------------------------------- */
+/* Content
+----------------------------------------------- */
+body {
+font: normal normal 12px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #222222;
+background: #66bbdd none repeat scroll top left;
+padding: 0 40px 40px 40px;
+}
+html body .region-inner {
+min-width: 0;
+max-width: 100%;
+width: auto;
+}
+h2 {
+font-size: 22px;
+}
+a:link {
+text-decoration:none;
+color: #2288bb;
+}
+a:visited {
+text-decoration:none;
+color: #888888;
+}
+a:hover {
+text-decoration:underline;
+color: #33aaff;
+}
+.body-fauxcolumn-outer .fauxcolumn-inner {
+background: transparent url(../../../resources.blogblog.com/blogblog/data/1kt/simple/body_gradient_tile_light.png) repeat scroll top left;
+_background-image: none;
+}
+.body-fauxcolumn-outer .cap-top {
+position: absolute;
+z-index: 1;
+height: 400px;
+width: 100%;
+}
+.body-fauxcolumn-outer .cap-top .cap-left {
+width: 100%;
+background: transparent url(../../../resources.blogblog.com/blogblog/data/1kt/simple/gradients_light.png) repeat-x scroll top left;
+_background-image: none;
+}
+.content-outer {
+-moz-box-shadow: 0 0 40px rgba(0, 0, 0, .15);
+-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+-goog-ms-box-shadow: 0 0 10px #333333;
+box-shadow: 0 0 40px rgba(0, 0, 0, .15);
+margin-bottom: 1px;
+}
+.content-inner {
+padding: 10px 10px;
+}
+.content-inner {
+background-color: #ffffff;
+}
+/* Header
+----------------------------------------------- */
+.header-outer {
+background: transparent none repeat-x scroll 0 -400px;
+_background-image: none;
+}
+.Header h1 {
+font: normal normal 60px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #3399bb;
+text-shadow: -1px -1px 1px rgba(0, 0, 0, .2);
+}
+.Header h1 a {
+color: #3399bb;
+}
+.Header .description {
+font-size: 140%;
+color: #777777;
+}
+.header-inner .Header .titlewrapper {
+padding: 22px 30px;
+}
+.header-inner .Header .descriptionwrapper {
+padding: 0 30px;
+}
+/* Tabs
+----------------------------------------------- */
+.tabs-inner .section:first-child {
+border-top: 1px solid #eeeeee;
+}
+.tabs-inner .section:first-child ul {
+margin-top: -1px;
+border-top: 1px solid #eeeeee;
+border-left: 0 solid #eeeeee;
+border-right: 0 solid #eeeeee;
+}
+.tabs-inner .widget ul {
+background: #f5f5f5 url(../../../resources.blogblog.com/blogblog/data/1kt/simple/gradients_light.png) repeat-x scroll 0 -800px;
+_background-image: none;
+border-bottom: 1px solid #eeeeee;
+margin-top: 0;
+margin-left: -30px;
+margin-right: -30px;
+}
+.tabs-inner .widget li a {
+display: inline-block;
+padding: .6em 1em;
+font: normal normal 14px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #999999;
+border-left: 1px solid #ffffff;
+border-right: 1px solid #eeeeee;
+}
+.tabs-inner .widget li:first-child a {
+border-left: none;
+}
+.tabs-inner .widget li.selected a, .tabs-inner .widget li a:hover {
+color: #000000;
+background-color: #eeeeee;
+text-decoration: none;
+}
+/* Columns
+----------------------------------------------- */
+.main-outer {
+border-top: 0 solid #eeeeee;
+}
+.fauxcolumn-left-outer .fauxcolumn-inner {
+border-right: 1px solid #eeeeee;
+}
+.fauxcolumn-right-outer .fauxcolumn-inner {
+border-left: 1px solid #eeeeee;
+}
+/* Headings
+----------------------------------------------- */
+div.widget > h2,
+div.widget h2.title {
+margin: 0 0 1em 0;
+font: normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #000000;
+}
+/* Widgets
+----------------------------------------------- */
+.widget .zippy {
+color: #999999;
+text-shadow: 2px 2px 1px rgba(0, 0, 0, .1);
+}
+.widget .popular-posts ul {
+list-style: none;
+}
+/* Posts
+----------------------------------------------- */
+h2.date-header {
+font: normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+}
+.date-header span {
+background-color: transparent;
+color: #222222;
+padding: inherit;
+letter-spacing: inherit;
+margin: inherit;
+}
+.main-inner {
+padding-top: 30px;
+padding-bottom: 30px;
+}
+.main-inner .column-center-inner {
+padding: 0 15px;
+}
+.main-inner .column-center-inner .section {
+margin: 0 15px;
+}
+.post {
+margin: 0 0 25px 0;
+}
+h3.post-title, .comments h4 {
+font: normal normal 22px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+margin: .75em 0 0;
+}
+.post-body {
+font-size: 110%;
+line-height: 1.4;
+position: relative;
+}
+.post-body img, .post-body .tr-caption-container, .Profile img, .Image img,
+.BlogList .item-thumbnail img {
+padding: 2px;
+background: #ffffff;
+border: 1px solid #eeeeee;
+-moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+}
+.post-body img, .post-body .tr-caption-container {
+padding: 5px;
+}
+.post-body .tr-caption-container {
+color: #222222;
+}
+.post-body .tr-caption-container img {
+padding: 0;
+background: transparent;
+border: none;
+-moz-box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+-webkit-box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+}
+.post-header {
+margin: 0 0 1.5em;
+line-height: 1.6;
+font-size: 90%;
+}
+.post-footer {
+margin: 20px -2px 0;
+padding: 5px 10px;
+color: #666666;
+background-color: #f9f9f9;
+border-bottom: 1px solid #eeeeee;
+line-height: 1.6;
+font-size: 90%;
+}
+#comments .comment-author {
+padding-top: 1.5em;
+border-top: 1px solid #eeeeee;
+background-position: 0 1.5em;
+}
+#comments .comment-author:first-child {
+padding-top: 0;
+border-top: none;
+}
+.avatar-image-container {
+margin: .2em 0 0;
+}
+#comments .avatar-image-container img {
+border: 1px solid #eeeeee;
+}
+/* Comments
+----------------------------------------------- */
+.comments .comments-content .icon.blog-author {
+background-repeat: no-repeat;
+background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9sLFwMeCjjhcOMAAAD+SURBVDjLtZSvTgNBEIe/WRRnm3U8RC1neQdsm1zSBIU9VVF1FkUguQQsD9ITmD7ECZIJSE4OZo9stoVjC/zc7ky+zH9hXwVwDpTAWWLrgS3QAe8AZgaAJI5zYAmc8r0G4AHYHQKVwII8PZrZFsBFkeRCABYiMh9BRUhnSkPTNCtVXYXURi1FpBDgArj8QU1eVXUzfnjv7yP7kwu1mYrkWlU33vs1QNu2qU8pwN0UpKoqokjWwCztrMuBhEhmh8bD5UDqur75asbcX0BGUB9/HAMB+r32hznJgXy2v0sGLBcyAJ1EK3LFcbo1s91JeLwAbwGYu7TP/3ZGfnXYPgAVNngtqatUNgAAAABJRU5ErkJggg==);
+}
+.comments .comments-content .loadmore a {
+border-top: 1px solid #999999;
+border-bottom: 1px solid #999999;
+}
+.comments .comment-thread.inline-thread {
+background-color: #f9f9f9;
+}
+.comments .continue {
+border-top: 2px solid #999999;
+}
+/* Accents
+---------------------------------------------- */
+.section-columns td.columns-cell {
+border-left: 1px solid #eeeeee;
+}
+.blog-pager {
+background: transparent none no-repeat scroll top center;
+}
+.blog-pager-older-link, .home-link,
+.blog-pager-newer-link {
+background-color: #ffffff;
+padding: 5px;
+}
+.footer-outer {
+border-top: 0 dashed #bbbbbb;
+}
+/* Mobile
+----------------------------------------------- */
+body.mobile  {
+background-size: auto;
+}
+.mobile .body-fauxcolumn-outer {
+background: transparent none repeat scroll top left;
+}
+.mobile .body-fauxcolumn-outer .cap-top {
+background-size: 100% auto;
+}
+.mobile .content-outer {
+-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+}
+.mobile .tabs-inner .widget ul {
+margin-left: 0;
+margin-right: 0;
+}
+.mobile .post {
+margin: 0;
+}
+.mobile .main-inner .column-center-inner .section {
+margin: 0;
+}
+.mobile .date-header span {
+padding: 0.1em 10px;
+margin: 0 -10px;
+}
+.mobile h3.post-title {
+margin: 0;
+}
+.mobile .blog-pager {
+background: transparent none no-repeat scroll top center;
+}
+.mobile .footer-outer {
+border-top: none;
+}
+.mobile .main-inner, .mobile .footer-inner {
+background-color: #ffffff;
+}
+.mobile-index-contents {
+color: #222222;
+}
+.mobile-link-button {
+background-color: #2288bb;
+}
+.mobile-link-button a:link, .mobile-link-button a:visited {
+color: #ffffff;
+}
+.mobile .tabs-inner .section:first-child {
+border-top: none;
+}
+.mobile .tabs-inner .PageList .widget-content {
+background-color: #eeeeee;
+color: #000000;
+border-top: 1px solid #eeeeee;
+border-bottom: 1px solid #eeeeee;
+}
+.mobile .tabs-inner .PageList .widget-content .pagelist-arrow {
+border-left: 1px solid #eeeeee;
+}
+
+--></style>
+<style id='template-skin-1' type='text/css'><!--
+body {
+min-width: 960px;
+}
+.content-outer, .content-fauxcolumn-outer, .region-inner {
+min-width: 960px;
+max-width: 960px;
+_width: 960px;
+}
+.main-inner .columns {
+padding-left: 0;
+padding-right: 310px;
+}
+.main-inner .fauxcolumn-center-outer {
+left: 0;
+right: 310px;
+/* IE6 does not respect left and right together */
+_width: expression(this.parentNode.offsetWidth -
+parseInt("0") -
+parseInt("310px") + 'px');
+}
+.main-inner .fauxcolumn-left-outer {
+width: 0;
+}
+.main-inner .fauxcolumn-right-outer {
+width: 310px;
+}
+.main-inner .column-left-outer {
+width: 0;
+right: 100%;
+margin-left: -0;
+}
+.main-inner .column-right-outer {
+width: 310px;
+margin-right: -310px;
+}
+#layout {
+min-width: 0;
+}
+#layout .content-outer {
+min-width: 0;
+width: 800px;
+}
+#layout .region-inner {
+min-width: 0;
+width: auto;
+}
+body#layout div.add_widget {
+padding: 8px;
+}
+body#layout div.add_widget a {
+margin-left: 32px;
+}
+--></style>
+<link href='../../../www.blogger.com/dyn-css/authorizationde36.css?targetBlogID=5998090735925918818&amp;zx=10b1f290-4e62-4c93-9781-c7579685fd39' media='none' onload='if(media!=&#39;all&#39;)media=&#39;all&#39;' rel='stylesheet'/><noscript><link href='../../../www.blogger.com/dyn-css/authorizationde36.css?targetBlogID=5998090735925918818&amp;zx=10b1f290-4e62-4c93-9781-c7579685fd39' rel='stylesheet'/></noscript>
+
+</head>
+<body class='loading variant-pale'>
+<div class='navbar section' id='navbar' name='Navbar'><div class='widget Navbar' data-version='1' id='Navbar1'><script type="text/javascript">
+    function setAttributeOnload(object, attribute, val) {
+      if(window.addEventListener) {
+        window.addEventListener('load',
+          function(){ object[attribute] = val; }, false);
+      } else {
+        window.attachEvent('onload', function(){ object[attribute] = val; });
+      }
+    }
+  </script>
+<div id="navbar-iframe-container"></div>
+<script type="text/javascript" src="../../../apis.google.com/js/plusone.js"></script>
+<script type="text/javascript">
+      gapi.load("gapi.iframes:gapi.iframes.style.bubble", function() {
+        if (gapi.iframes && gapi.iframes.getContext) {
+          gapi.iframes.getContext().openChild({
+              url: 'https://www.blogger.com/navbar.g?targetBlogID\x3d5998090735925918818\x26blogName\x3dlotro+revenge\x26publishMode\x3dPUBLISH_MODE_BLOGSPOT\x26navbarType\x3dLIGHT\x26layoutType\x3dLAYOUTS\x26searchRoot\x3dhttps://bwgypyth.blogspot.com/search\x26blogLocale\x3dde\x26v\x3d2\x26homepageUrl\x3dhttp://bwgypyth.blogspot.com/\x26targetPostID\x3d3653141589936136182\x26blogPostOrPageUrl\x3dhttp://bwgypyth.blogspot.com/2012/07/i-recently-started-hacking-on-lotro.html\x26vt\x3d-6472485759185788864',
+              where: document.getElementById("navbar-iframe-container"),
+              id: "navbar-iframe"
+          });
+        }
+      });
+    </script><script type="text/javascript">
+(function() {
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.src = '../../../pagead2.googlesyndication.com/pagead/js/f.txt';
+var head = document.getElementsByTagName('head')[0];
+if (head) {
+head.appendChild(script);
+}})();
+</script>
+</div></div>
+<div class='body-fauxcolumns'>
+<div class='fauxcolumn-outer body-fauxcolumn-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<div class='content'>
+<div class='content-fauxcolumns'>
+<div class='fauxcolumn-outer content-fauxcolumn-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<div class='content-outer'>
+<div class='content-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left content-fauxborder-left'>
+<div class='fauxborder-right content-fauxborder-right'></div>
+<div class='content-inner'>
+<header>
+<div class='header-outer'>
+<div class='header-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left header-fauxborder-left'>
+<div class='fauxborder-right header-fauxborder-right'></div>
+<div class='region-inner header-inner'>
+<div class='header section' id='header' name='Header'><div class='widget Header' data-version='1' id='Header1'>
+<div id='header-inner'>
+<div class='titlewrapper'>
+<h1 class='title'>
+<a href='../../index.html'>
+lotro revenge
+</a>
+</h1>
+</div>
+<div class='descriptionwrapper'>
+<p class='description'><span>A blog about gathering internal information about LOTRO.</span></p>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+<div class='header-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</header>
+<div class='tabs-outer'>
+<div class='tabs-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left tabs-fauxborder-left'>
+<div class='fauxborder-right tabs-fauxborder-right'></div>
+<div class='region-inner tabs-inner'>
+<div class='tabs no-items section' id='crosscol' name='Spaltenübergreifend'></div>
+<div class='tabs no-items section' id='crosscol-overflow' name='Cross-Column 2'></div>
+</div>
+</div>
+<div class='tabs-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='main-outer'>
+<div class='main-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left main-fauxborder-left'>
+<div class='fauxborder-right main-fauxborder-right'></div>
+<div class='region-inner main-inner'>
+<div class='columns fauxcolumns'>
+<div class='fauxcolumn-outer fauxcolumn-center-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='fauxcolumn-outer fauxcolumn-left-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='fauxcolumn-outer fauxcolumn-right-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<!-- corrects IE6 width calculation -->
+<div class='columns-inner'>
+<div class='column-center-outer'>
+<div class='column-center-inner'>
+<div class='main section' id='main' name='Hauptbereich'><div class='widget Blog' data-version='1' id='Blog1'>
+<div class='blog-posts hfeed'>
+
+          <div class="date-outer">
+        
+<h2 class='date-header'><span>Samstag, 28. Juli 2012</span></h2>
+
+          <div class="date-posts">
+        
+<div class='post-outer'>
+<div class='post hentry uncustomized-post-template' itemprop='blogPost' itemscope='itemscope' itemtype='http://schema.org/BlogPosting'>
+<meta content='5998090735925918818' itemprop='blogId'/>
+<meta content='3653141589936136182' itemprop='postId'/>
+<a name='3653141589936136182'></a>
+<h3 class='post-title entry-title' itemprop='name'>
+Revamping the work
+</h3>
+<div class='post-header'>
+<div class='post-header-line-1'></div>
+</div>
+<div class='post-body entry-content' id='post-body-3653141589936136182' itemprop='description articleBody'>
+I recently started hacking on lotro again, trying to figure out the checksumming. Right now I fail to understand how it works, eve hough tAmMo left some hints.<br />
+<br />
+Dear tAmMo, if you read this, please get in contact with me. Thanks!
+<div style='clear: both;'></div>
+</div>
+<div class='post-footer'>
+<div class='post-footer-line post-footer-line-1'>
+<span class='post-author vcard'>
+Eingestellt von
+<span class='fn' itemprop='author' itemscope='itemscope' itemtype='http://schema.org/Person'>
+<meta content='https://www.blogger.com/profile/05117736107025149323' itemprop='url'/>
+<a class='g-profile' href='https://www.blogger.com/profile/05117736107025149323' rel='author' title='author profile'>
+<span itemprop='name'>bwgypyth</span>
+</a>
+</span>
+</span>
+<span class='post-timestamp'>
+um
+<meta content='http://bwgypyth.blogspot.com/2012/07/i-recently-started-hacking-on-lotro.html' itemprop='url'/>
+<a class='timestamp-link' href='i-recently-started-hacking-on-lotro.html' rel='bookmark' title='permanent link'><abbr class='published' itemprop='datePublished' title='2012-07-28T01:18:00-07:00'>01:18</abbr></a>
+</span>
+<span class='reaction-buttons'>
+</span>
+<span class='post-comment-link'>
+</span>
+<span class='post-icons'>
+<span class='item-control blog-admin pid-957954180'>
+<a href='https://www.blogger.com/post-edit.g?blogID=5998090735925918818&amp;postID=3653141589936136182&amp;from=pencil' title='Post bearbeiten'>
+<img alt='' class='icon-action' height='18' src='../../../resources.blogblog.com/img/icon18_edit_allbkg.gif' width='18'/>
+</a>
+</span>
+</span>
+<div class='post-share-buttons goog-inline-block'>
+</div>
+</div>
+<div class='post-footer-line post-footer-line-2'>
+<span class='post-labels'>
+</span>
+</div>
+<div class='post-footer-line post-footer-line-3'>
+<span class='post-location'>
+</span>
+</div>
+</div>
+</div>
+<div class='comments' id='comments'>
+<a name='comments'></a>
+<h4> Kommentare:</h4>
+<div class='comments-content'>
+<script async='async' src='#' type='text/javascript'></script>
+<script type='text/javascript'>
+    (function() {
+      var items = null;
+      var msgs = null;
+      var config = {};
+
+// <![CDATA[
+      var cursor = null;
+      if (items && items.length > 0) {
+        cursor = parseInt(items[items.length - 1].timestamp) + 1;
+      }
+
+      var bodyFromEntry = function(entry) {
+        var text = (entry &&
+                    ((entry.content && entry.content.$t) ||
+                     (entry.summary && entry.summary.$t))) ||
+            '';
+        if (entry && entry.gd$extendedProperty) {
+          for (var k in entry.gd$extendedProperty) {
+            if (entry.gd$extendedProperty[k].name == 'blogger.contentRemoved') {
+              return '<span class="deleted-comment">' + text + '</span>';
+            }
+          }
+        }
+        return text;
+      }
+
+      var parse = function(data) {
+        cursor = null;
+        var comments = [];
+        if (data && data.feed && data.feed.entry) {
+          for (var i = 0, entry; entry = data.feed.entry[i]; i++) {
+            var comment = {};
+            // comment ID, parsed out of the original id format
+            var id = /blog-(\d+).post-(\d+)/.exec(entry.id.$t);
+            comment.id = id ? id[2] : null;
+            comment.body = bodyFromEntry(entry);
+            comment.timestamp = Date.parse(entry.published.$t) + '';
+            if (entry.author && entry.author.constructor === Array) {
+              var auth = entry.author[0];
+              if (auth) {
+                comment.author = {
+                  name: (auth.name ? auth.name.$t : undefined),
+                  profileUrl: (auth.uri ? auth.uri.$t : undefined),
+                  avatarUrl: (auth.gd$image ? auth.gd$image.src : undefined)
+                };
+              }
+            }
+            if (entry.link) {
+              if (entry.link[2]) {
+                comment.link = comment.permalink = entry.link[2].href;
+              }
+              if (entry.link[3]) {
+                var pid = /.*comments\/default\/(\d+)\?.*/.exec(entry.link[3].href);
+                if (pid && pid[1]) {
+                  comment.parentId = pid[1];
+                }
+              }
+            }
+            comment.deleteclass = 'item-control blog-admin';
+            if (entry.gd$extendedProperty) {
+              for (var k in entry.gd$extendedProperty) {
+                if (entry.gd$extendedProperty[k].name == 'blogger.itemClass') {
+                  comment.deleteclass += ' ' + entry.gd$extendedProperty[k].value;
+                } else if (entry.gd$extendedProperty[k].name == 'blogger.displayTime') {
+                  comment.displayTime = entry.gd$extendedProperty[k].value;
+                }
+              }
+            }
+            comments.push(comment);
+          }
+        }
+        return comments;
+      };
+
+      var paginator = function(callback) {
+        if (hasMore()) {
+          var url = config.feed + '?alt=json&v=2&orderby=published&reverse=false&max-results=50';
+          if (cursor) {
+            url += '&published-min=' + new Date(cursor).toISOString();
+          }
+          window.bloggercomments = function(data) {
+            var parsed = parse(data);
+            cursor = parsed.length < 50 ? null
+                : parseInt(parsed[parsed.length - 1].timestamp) + 1
+            callback(parsed);
+            window.bloggercomments = null;
+          }
+          url += '&callback=bloggercomments';
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.src = url;
+          document.getElementsByTagName('head')[0].appendChild(script);
+        }
+      };
+      var hasMore = function() {
+        return !!cursor;
+      };
+      var getMeta = function(key, comment) {
+        if ('iswriter' == key) {
+          var matches = !!comment.author
+              && comment.author.name == config.authorName
+              && comment.author.profileUrl == config.authorUrl;
+          return matches ? 'true' : '';
+        } else if ('deletelink' == key) {
+          return config.baseUri + '/delete-comment.g?blogID='
+               + config.blogId + '&postID=' + comment.id;
+        } else if ('deleteclass' == key) {
+          return comment.deleteclass;
+        }
+        return '';
+      };
+
+      var replybox = null;
+      var replyUrlParts = null;
+      var replyParent = undefined;
+
+      var onReply = function(commentId, domId) {
+        if (replybox == null) {
+          // lazily cache replybox, and adjust to suit this style:
+          replybox = document.getElementById('comment-editor');
+          if (replybox != null) {
+            replybox.height = '250px';
+            replybox.style.display = 'block';
+            replyUrlParts = replybox.src.split('#');
+          }
+        }
+        if (replybox && (commentId !== replyParent)) {
+          replybox.src = '';
+          document.getElementById(domId).insertBefore(replybox, null);
+          replybox.src = replyUrlParts[0]
+              + (commentId ? '&parentID=' + commentId : '')
+              + '#' + replyUrlParts[1];
+          replyParent = commentId;
+        }
+      };
+
+      var hash = (window.location.hash || '#').substring(1);
+      var startThread, targetComment;
+      if (/^comment-form_/.test(hash)) {
+        startThread = hash.substring('comment-form_'.length);
+      } else if (/^c[0-9]+$/.test(hash)) {
+        targetComment = hash.substring(1);
+      }
+
+      // Configure commenting API:
+      var configJso = {
+        'maxDepth': config.maxThreadDepth
+      };
+      var provider = {
+        'id': config.postId,
+        'data': items,
+        'loadNext': paginator,
+        'hasMore': hasMore,
+        'getMeta': getMeta,
+        'onReply': onReply,
+        'rendered': true,
+        'initComment': targetComment,
+        'initReplyThread': startThread,
+        'config': configJso,
+        'messages': msgs
+      };
+
+      var render = function() {
+        if (window.goog && window.goog.comments) {
+          var holder = document.getElementById('comment-holder');
+          window.goog.comments.render(holder, provider);
+        }
+      };
+
+      // render now, or queue to render when library loads:
+      if (window.goog && window.goog.comments) {
+        render();
+      } else {
+        window.goog = window.goog || {};
+        window.goog.comments = window.goog.comments || {};
+        window.goog.comments.loadQueue = window.goog.comments.loadQueue || [];
+        window.goog.comments.loadQueue.push(render);
+      }
+    })();
+// ]]>
+  </script>
+<div id='comment-holder'>
+<div class="comment-thread toplevel-thread"><ol id="top-ra"><li class="comment" id="c3181932997462028041"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro98ca.html?showComment=1343907669824#c3181932997462028041">2. August 2012 um 04:41</a></span></div><p class="comment-content">That&#39;s nice to hear, im thinking about joining again too ... maybe we should reactivate the #lotroemu channel on efnet again with a meeting that weekend.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="3181932997462028041">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=3181932997462028041">Löschen</a></span></span></div><div class="comment-replies"><div id="c3181932997462028041-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c3181932997462028041-ra" class="thread-chrome thread-expanded"><div></div><div id="c3181932997462028041-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3181932997462028041">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c3181932997462028041-ce"></div></li><li class="comment" id="c5106538553196926446"><div class="avatar-image-container"><img src="../../../3.bp.blogspot.com/_IirCth1qUZ8/SatfyRsENdI/AAAAAAAAAD0/hoHHe4lq69o/S45-s35/m_e75d2beec8872c0a1c7ff4ba0aa5acc1.png" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/14998084621146014050" rel="nofollow">Chris Herbert</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro0b7b.html?showComment=1344272606848#c5106538553196926446">6. August 2012 um 10:03</a></span></div><p class="comment-content">Please keep this up! I have waited soooooo long for someone to get at least a sandbox up and running if nothing else.<br><br>Please keep us updated.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="5106538553196926446">Antworten</a><span class="item-control blog-admin blog-admin pid-615927199"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=5106538553196926446">Löschen</a></span></span></div><div class="comment-replies"><div id="c5106538553196926446-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c5106538553196926446-ra" class="thread-chrome thread-expanded"><div></div><div id="c5106538553196926446-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="5106538553196926446">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c5106538553196926446-ce"></div></li><li class="comment" id="c7644932153066149079"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Wude</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro33b4.html?showComment=1344432198125#c7644932153066149079">8. August 2012 um 06:23</a></span></div><p class="comment-content">We could focus first on redoing the gls part (as for me at least doesn&#39;t work with the client updated). I have already started this part, though I cannot get up the list of available worlds.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="7644932153066149079">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=7644932153066149079">Löschen</a></span></span></div><div class="comment-replies"><div id="c7644932153066149079-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c7644932153066149079-ra" class="thread-chrome thread-expanded"><div></div><div id="c7644932153066149079-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="7644932153066149079">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c7644932153066149079-ce"></div></li><li class="comment" id="c890213726558466851"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Wude</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro6c3f.html?showComment=1344628170063#c890213726558466851">10. August 2012 um 12:49</a></span></div><p class="comment-content">Got server list up (though servers appear down for the moment), and got authentication to show the error box when using wrong password :)</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="890213726558466851">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=890213726558466851">Löschen</a></span></span></div><div class="comment-replies"><div id="c890213726558466851-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c890213726558466851-ra" class="thread-chrome thread-expanded"><div></div><div id="c890213726558466851-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="890213726558466851">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c890213726558466851-ce"></div></li><li class="comment" id="c2836765535599411842"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Wude</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotrob9a4.html?showComment=1344715075619#c2836765535599411842">11. August 2012 um 12:57</a></span></div><p class="comment-content">Ok, login stage finished, user &amp; password verification, servers listed (with status up) and no issue entering the world queue for the selected server.<br>Right now, it sends a request to the server (the loading screen before char screen) and stays there (for now)</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="2836765535599411842">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=2836765535599411842">Löschen</a></span></span></div><div class="comment-replies"><div id="c2836765535599411842-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c2836765535599411842-ra" class="thread-chrome thread-expanded"><div></div><div id="c2836765535599411842-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="2836765535599411842">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c2836765535599411842-ce"></div></li><li class="comment" id="c4136973831473096667"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotrof722.html?showComment=1344847859444#c4136973831473096667">13. August 2012 um 01:50</a></span></div><p class="comment-content">Wow, thats a nice state of progress again. Do you use static packets or are you already able to calculate them on your own (packet de-/compression &amp; chksum calc) ? I grabbed my testserver source this weekend and took a look at the packet/chksum generation again, did some cleanup and started to merge infos from now and then together. Lets meet on efnet #lotroemu some day ...</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="4136973831473096667">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=4136973831473096667">Löschen</a></span></span></div><div class="comment-replies"><div id="c4136973831473096667-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c4136973831473096667-ra" class="thread-chrome thread-expanded"><div></div><div id="c4136973831473096667-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="4136973831473096667">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c4136973831473096667-ce"></div></li><li class="comment" id="c1552720200908940157"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Wude</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro64dd.html?showComment=1344850399228#c1552720200908940157">13. August 2012 um 02:33</a></span></div><p class="comment-content">the login stage, user verification (to show the error box) and request to enter to the world queue is all handled by the asmx services and a pair of aspx pages</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="1552720200908940157">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=1552720200908940157">Löschen</a></span></span></div><div class="comment-replies"><div id="c1552720200908940157-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c1552720200908940157-ra" class="thread-chrome thread-expanded"><div></div><div id="c1552720200908940157-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="1552720200908940157">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c1552720200908940157-ce"></div></li><li class="comment" id="c8477248408914734837"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Gen</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro7d1d.html?showComment=1344866701347#c8477248408914734837">13. August 2012 um 07:05</a></span></div><p class="comment-content">@xbadc0de, from what I can work out he&#39;s just generating the XML responses used by the launcher, nothing regarding the lotro client.<br><br>I haven&#39;t worked on my server for a while, but I was successfully generating and encrypting packets up to the character selection.<br><br>I stopped working on it before I had a chance to play with checksums, sadly.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="8477248408914734837">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=8477248408914734837">Löschen</a></span></span></div><div class="comment-replies"><div id="c8477248408914734837-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c8477248408914734837-ra" class="thread-chrome thread-expanded"><div></div><div id="c8477248408914734837-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="8477248408914734837">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c8477248408914734837-ce"></div></li><li class="comment" id="c775687101312156142"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotroeb1a.html?showComment=1348835707563#c775687101312156142">28. September 2012 um 05:35</a></span></div><p class="comment-content">I guess i will do some researches and updates to my old existing server code this weekend. Too bad that tAmMo seems not to be around anymore, so i have to do this checksum stuff all over again (encryption was already working on my old code), sounds like a waste of time, since he already found it out. Yeah well ... will be on #lotroemu if someone wants to join.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="775687101312156142">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=775687101312156142">Löschen</a></span></span></div><div class="comment-replies"><div id="c775687101312156142-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c775687101312156142-ra" class="thread-chrome thread-expanded"><div></div><div id="c775687101312156142-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="775687101312156142">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c775687101312156142-ce"></div></li><li class="comment" id="c7571209433176990908"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotroe168.html?showComment=1349334785281#c7571209433176990908">4. Oktober 2012 um 00:13</a></span></div><p class="comment-content">After 5 days &amp; nights of continuous work on this stuff i have a complete rewritten server running. <br><br>Running stable, multithreaded, with filtered 06 packets, movement partially working, no checksumming (using patched client).<br><br>Gen and i where holding the #lotroemu chan, jcairn showed up for some time ... but in conclusion i have to say this blog is dead, sad but true :( And since we would need some more people to work together on this pretty coordinated i can only say what tAmMo said in July ... im out of this too, again. As long as there is no main group of people with enough enthusiasm and a public git and maybe a forum instead of a single user controlled blog i will keep my stuff on hold too.<br><br>Its very sad that interest in this seemed to drop so much ...<br><br>P.S.: tAmMo if you read this, please try to get in contact with me, i have some questions regarding the 0x00000006 packets, especially the 03 40 03 .. and 03 40 04 .. movement ones and the mechanism behind them (e.g. where is the height info in the client packets) ...</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="7571209433176990908">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=7571209433176990908">Löschen</a></span></span></div><div class="comment-replies"><div id="c7571209433176990908-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c7571209433176990908-ra" class="thread-chrome thread-expanded"><div></div><div id="c7571209433176990908-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="7571209433176990908">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c7571209433176990908-ce"></div></li><li class="comment" id="c3057687654165343450"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro5307.html?showComment=1351378426102#c3057687654165343450">27. Oktober 2012 um 15:53</a></span></div><p class="comment-content">Whoah, don&#39;t think people aren&#39;t interested.<br><br></p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="3057687654165343450">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=3057687654165343450">Löschen</a></span></span></div><div class="comment-replies"><div id="c3057687654165343450-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c3057687654165343450-ra" class="thread-chrome thread-expanded"><div></div><div id="c3057687654165343450-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3057687654165343450">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c3057687654165343450-ce"></div></li><li class="comment" id="c3406145927364742850"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro382a.html?showComment=1351378606523#c3406145927364742850">27. Oktober 2012 um 15:56</a></span></div><p class="comment-content">I might be a bystander with little or no know-how when it comes to coding, but I can seriously tell you that a WHOLE lot of people would be interested in creating at least a sandbox server for lotro.<br><br>If you ever need a betatester, contact dakilven@gmail.com or deaforbust98@aim.com<br><br>Keep on working, i&#39;ll check on efnet for you guys within the weeks ;)</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="3406145927364742850">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=3406145927364742850">Löschen</a></span></span></div><div class="comment-replies"><div id="c3406145927364742850-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c3406145927364742850-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c7506424293802349520"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro0439.html?showComment=1351483877891#c7506424293802349520">28. Oktober 2012 um 21:11</a></span></div><p class="comment-content">I&#39;m contacting jtcairn to see if I could help in any way. DO NOT abandon this project.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=7506424293802349520">Löschen</a></span></span></div><div class="comment-replies"><div id="c7506424293802349520-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c7506424293802349520-ra" class="thread-chrome thread-expanded"><div></div><div id="c7506424293802349520-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="7506424293802349520">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c7506424293802349520-ce"></div></li><li class="comment" id="c4643116798808116026"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">JCairn</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro31d7.html?showComment=1351627487156#c4643116798808116026">30. Oktober 2012 um 13:04</a></span></div><p class="comment-content">I idle on IRC, if you send me a PM and you don&#39;t get a reply, I&#39;m probably not signed in (I use a bouncer), and I won&#39;t see your message.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=4643116798808116026">Löschen</a></span></span></div><div class="comment-replies"><div id="c4643116798808116026-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c4643116798808116026-ra" class="thread-chrome thread-expanded"><div></div><div id="c4643116798808116026-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="4643116798808116026">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c4643116798808116026-ce"></div></li><li class="comment" id="c4641912514538271386"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotroddfd.html?showComment=1352452121647#c4641912514538271386">9. November 2012 um 01:08</a></span></div><p class="comment-content">Well, as you might have noticed, people dont do anything anymore. I updated my server code during the last weeks and archived it now at the following state:<br><br>- working with latest Riders of Rohan client.<br>- &quot;heartbeat&quot; packet receive/response mechanism working 100% (block count &amp; size control).<br>- movement working 100% (still no mesh collision detection, but heightmap usage at 100%). Normal walk, speeded walking, go-to-jumping to a new relative or absolute position, all working fine, even into unassigned areas. Character is being able to climb/slide down even the biggest mountains if wanted.<br>- multithreaded multiplayer support (server accepts more than one connection, ppl see each other in the game is partly working)<br>- complete toolchain for fetching, analyzing and converting packets. Server is not using sampled packets anymore, instead some sort of export from the packetanalyzer is used which is more flexible.<br>- packet analysis done, providing bin-files for char selection, ingame UI config, chars representation within the world, etc. Includable in the above described export configuration.<br>- Ingame input/output handling from/to all sort of messaging tabs/functions 100%.<br>- Item handling partly working (add/inventory moving/destroy).<br>- placement of mob/npc within the world partly working.<br>- Alot of debug ingame control functions added (&quot;dot-commands&quot;), alot of debug output, either on server console or ingame if wanted. Mainly for packet inspection and to control server and character behavior.<br>- Some sort of selfmade API to pass yet unknown packets from the client to any type of inspection mechanism thats needed. Currently i pass them to a perl script for deep packet inspection. Creation of response packets within that mechanism partly implemented.<br>- All the implemented stuff that i forgot about right now :) ...<br><br>Now im stuck. I tried to understand the char selection data, i can change name, level, race, class, etc, but not the layout or clothing for example. Weird format ... And of course the collision detection on the meshes would be one big project too. <br><br>In conclusion, way too much work. It was a nice project, running fine for me as proof of concept and to chill around sometimes in the depths of middleearth (and the testareas of the developers :), but thats it. And since the IRC channel seems to be dead too after i left, well, dont need to say any more on this ...<br><br>Unless people get their - erm - lower back - up and do something that will prove they&#39;re still interested in this project i will be out, since I was quite disappointed with the behavior of the people. I dont understand how they claim they have big interest in this project and tell me they&#39;re urged to work on that, but then i have to explain them the very basics of the packet types, which is of course the first mandatory step to do, and it seems they even didnt come up with the idea of doing that on their own or even try to understand the infos that are already available :/ ... Sorry if some people may be offended by that, but thats how i saw it.<br><br>So, long story short, as said i archived this project now, moving onto the next one ...<br><br>Thanks to the people on the (dead) IRC chan #lotroemu for their support, hints and testing.<br><br>Over and out,<br>xbadc0de<br></p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=4641912514538271386">Löschen</a></span></span></div><div class="comment-replies"><div id="c4641912514538271386-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c4641912514538271386-ra" class="thread-chrome thread-expanded"><div></div><div id="c4641912514538271386-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="4641912514538271386">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c4641912514538271386-ce"></div></li><li class="comment" id="c5619830387163080898"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro90e1.html?showComment=1353214392210#c5619830387163080898">17. November 2012 um 20:53</a></span></div><p class="comment-content">Did you release this archive on github? I&#39;d very much like to see this.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=5619830387163080898">Löschen</a></span></span></div><div class="comment-replies"><div id="c5619830387163080898-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c5619830387163080898-ra" class="thread-chrome thread-expanded"><div></div><div id="c5619830387163080898-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="5619830387163080898">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c5619830387163080898-ce"></div></li><li class="comment" id="c503822696949537522"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro756f.html?showComment=1353214817790#c503822696949537522">17. November 2012 um 21:00</a></span></div><p class="comment-content">I see you didn&#39;t. Would you be interested in releasing this work?</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=503822696949537522">Löschen</a></span></span></div><div class="comment-replies"><div id="c503822696949537522-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c503822696949537522-ra" class="thread-chrome thread-expanded"><div></div><div id="c503822696949537522-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="503822696949537522">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c503822696949537522-ce"></div></li><li class="comment" id="c7733947033948552909"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro488a.html?showComment=1353216948709#c7733947033948552909">17. November 2012 um 21:35</a></span></div><p class="comment-content">Because, i&#39;m not going to lie, it sounds like you have a playable release, a release i want to play.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=7733947033948552909">Löschen</a></span></span></div><div class="comment-replies"><div id="c7733947033948552909-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c7733947033948552909-ra" class="thread-chrome thread-expanded"><div></div><div id="c7733947033948552909-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="7733947033948552909">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c7733947033948552909-ce"></div></li><li class="comment" id="c6144286948592629051"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro0896.html?showComment=1356813403962#c6144286948592629051">29. Dezember 2012 um 12:36</a></span></div><p class="comment-content">Is the source available somewhere?</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=6144286948592629051">Löschen</a></span></span></div><div class="comment-replies"><div id="c6144286948592629051-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c6144286948592629051-ra" class="thread-chrome thread-expanded"><div></div><div id="c6144286948592629051-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6144286948592629051">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c6144286948592629051-ce"></div></li><li class="comment" id="c3047176120233963205"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro5b4b.html?showComment=1357015525217#c3047176120233963205">31. Dezember 2012 um 20:45</a></span></div><p class="comment-content">nah, i think it&#39;s private for himself. sad, happy new years everyone anyway. this project is officially dead i believe. (btw badc0de if you read this, please release it)</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=3047176120233963205">Löschen</a></span></span></div><div class="comment-replies"><div id="c3047176120233963205-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c3047176120233963205-ra" class="thread-chrome thread-expanded"><div></div><div id="c3047176120233963205-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3047176120233963205">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c3047176120233963205-ce"></div></li></div><div id="c3406145927364742850-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3406145927364742850">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c3406145927364742850-ce"></div></li><li class="comment" id="c1803689454352172515"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro14e6.html?showComment=1357216523043#c1803689454352172515">3. Januar 2013 um 04:35</a></span></div><p class="comment-content">Why should i? You wouldn&#39;t be able to do *anything* useful with it, this is no project for &quot;bystander with little or no know-how when it comes to coding&quot;. This is no &quot;ClickMeForFun.exe&quot; with a fancy GUI, which gives you a 200 person private server where you can directly jump to the dungeon entry and kill draigoch or saruman in a raid like you may do it on the original, this is a bug-infested, private data driven, work-in-progress, never-finished piece of code at its very beginning, which would take another coder atleast two days to understand, and you ... well ... Once someone like tAmMo would show up (again), showing real interest in the project (and not just in the result) i would be happy to share the code ... the CODE, not some .EXE ...<br><br>Sorry.<br></p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="1803689454352172515">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=1803689454352172515">Löschen</a></span></span></div><div class="comment-replies"><div id="c1803689454352172515-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c1803689454352172515-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c442272282283510820"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/05117736107025149323" rel="nofollow">bwgypyth</a></cite><span class="icon user blog-author"></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro6892.html?showComment=1357468529880#c442272282283510820">6. Januar 2013 um 02:35</a></span></div><p class="comment-content">I&#39;m interested in the code, not any binary. If you like to get your code up to the gitorious repository just send it to me on bwgypyth _at_ gmx _ net.<br><br>I&#39;m currently working on my own code but get distracted way to often :-/</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-957954180"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=442272282283510820">Löschen</a></span></span></div><div class="comment-replies"><div id="c442272282283510820-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c442272282283510820-ra" class="thread-chrome thread-expanded"><div></div><div id="c442272282283510820-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="442272282283510820">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c442272282283510820-ce"></div></li><li class="comment" id="c578182460114168932"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotrod20d.html?showComment=1357567159748#c578182460114168932">7. Januar 2013 um 05:59</a></span></div><p class="comment-content">So whats your state of the code?</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=578182460114168932">Löschen</a></span></span></div><div class="comment-replies"><div id="c578182460114168932-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c578182460114168932-ra" class="thread-chrome thread-expanded"><div></div><div id="c578182460114168932-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="578182460114168932">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c578182460114168932-ce"></div></li><li class="comment" id="c9215742405435181081"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro4c35.html?showComment=1418725902353#c9215742405435181081">16. Dezember 2014 um 02:31</a></span></div><p class="comment-content">&quot;would be happy to share the code ... the CODE&quot;<br><br>Then share the code. Und suhle dich nicht in Selbstmitleid.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=9215742405435181081">Löschen</a></span></span></div><div class="comment-replies"><div id="c9215742405435181081-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c9215742405435181081-ra" class="thread-chrome thread-expanded"><div></div><div id="c9215742405435181081-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="9215742405435181081">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c9215742405435181081-ce"></div></li></div><div id="c1803689454352172515-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="1803689454352172515">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c1803689454352172515-ce"></div></li><li class="comment" id="c1665075840301820247"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/05117736107025149323" rel="nofollow">bwgypyth</a></cite><span class="icon user blog-author"></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro60f0.html?showComment=1360104802371#c1665075840301820247">5. Februar 2013 um 14:53</a></span></div><p class="comment-content">My code currently does not much. It just ack&#39;s the packages it gets from the client, but I get a disconnect after a few seconds (at most a minute). I&#39;m currently trying to understand the checksum-calculation, but I&#39;m totally stuck :-/</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="1665075840301820247">Antworten</a><span class="item-control blog-admin blog-admin pid-957954180"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=1665075840301820247">Löschen</a></span></span></div><div class="comment-replies"><div id="c1665075840301820247-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c1665075840301820247-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c4071380139531472097"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotroc2f1.html?showComment=1360233126695#c4071380139531472097">7. Februar 2013 um 02:32</a></span></div><p class="comment-content">You should not focus that much on the checksum calculation, its still very easy to patch the client to ignore it. There&#39;s muuuuch more other stuff to do and understand instead :).<br><br>If you need the search/patch bytes for the latest client (like tAmMo provided for the old one ages ago) just tell me.<br><br></p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=4071380139531472097">Löschen</a></span></span></div><div class="comment-replies"><div id="c4071380139531472097-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c4071380139531472097-ra" class="thread-chrome thread-expanded"><div></div><div id="c4071380139531472097-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="4071380139531472097">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c4071380139531472097-ce"></div></li><li class="comment" id="c563829075032357113"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/05117736107025149323" rel="nofollow">bwgypyth</a></cite><span class="icon user blog-author"></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro8a13.html?showComment=1360274437630#c563829075032357113">7. Februar 2013 um 14:00</a></span></div><p class="comment-content">I could definitely need some help patching the client. I&#39;m currently using a very old version that I patched when tAmMo gave me the instructions. From what I remember I needed to patch 2 bytes to disable encryption checks and also replace the public key used by the client. But I can&#39;t remember how I did it.<br><br>Any instructions would be highly appreciated :-)</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-957954180"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=563829075032357113">Löschen</a></span></span></div><div class="comment-replies"><div id="c563829075032357113-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c563829075032357113-ra" class="thread-chrome thread-expanded"><div></div><div id="c563829075032357113-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="563829075032357113">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c563829075032357113-ce"></div></li><li class="comment" id="c5947747575584458369"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotrof04e.html?showComment=1360337973005#c5947747575584458369">8. Februar 2013 um 07:39</a></span></div><p class="comment-content">Hex-Search for 3b 4c 24 1c 75 6a 8b 45 and replace the 75 6a by 90 90. I never took care about the public key and never came across any problems with the key and communications. FYI: The (latest) client for Rohan has some major changes in the network-protocol, thus it wont work any longer with older server code (not even with old presampled packets).</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=5947747575584458369">Löschen</a></span></span></div><div class="comment-replies"><div id="c5947747575584458369-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c5947747575584458369-ra" class="thread-chrome thread-expanded"><div></div><div id="c5947747575584458369-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="5947747575584458369">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c5947747575584458369-ce"></div></li><li class="comment" id="c3705737760675469108"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/05117736107025149323" rel="nofollow">bwgypyth</a></cite><span class="icon user blog-author"></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro1ace.html?showComment=1360344728560#c3705737760675469108">8. Februar 2013 um 09:32</a></span></div><p class="comment-content">It&#39;s bad news that the network protocol changed. It might render our current information useless. I thought the protocol was changed when mounted combat was introduced, but I might be wrong.<br><br>Thanks for the patching instructions. I&#39;ll look into this later today. But for now I&#39;ll keep my current client (Isengart standalone download, iirc) so I can at least continue testing my server code.<br><br>From what I saw yesterday tAmMo also wrote code that generated jumptables from the raw packets. It might be possible that we could adapt to the changes by regenerating those tables.<br><br>I also updated tAmMo&#39;s code with a couple of changes, see http://gitorious.org/lotro/lotro-tools if you like.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-957954180"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=3705737760675469108">Löschen</a></span></span></div><div class="comment-replies"><div id="c3705737760675469108-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c3705737760675469108-ra" class="thread-chrome thread-expanded"><div></div><div id="c3705737760675469108-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3705737760675469108">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c3705737760675469108-ce"></div></li><li class="comment" id="c7024542230837777860"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotrocfce.html?showComment=1360604395357#c7024542230837777860">11. Februar 2013 um 09:39</a></span></div><p class="comment-content">The tables keept the same for enc and dec... The biggest change: Network Byte Order changed(eg. in the beginning, the server id was F1 00 and changes to 00 F1, same with the data payload length and all the other fields in payload header). Maybe this step was done because lotro could now be played on osx. You only have to reverse these (U)Int32,(U)Int16,... values. C# binaryreader uses little endian format, you&#39;ll only have to implement some &quot;read the big endian format&quot; methods.<br><br>Checksum generation/validation for server/client packets keept the same, but it&#39;s too difficult to use and has no priority.<br><br>My question:<br>Has anyone figured out how to &quot;enable&quot; the admin interface or debug console inside the client (at character selection screen)? This could enormously help to find out which packet is for which action.<br><br>Btw. the old asheron&#39;s call mmo game seems to use turbines protocol in a way. I looked at an old emu and found some similarities. Too bad that turbine never released the source in the past.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=7024542230837777860">Löschen</a></span></span></div><div class="comment-replies"><div id="c7024542230837777860-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c7024542230837777860-ra" class="thread-chrome thread-expanded"><div></div><div id="c7024542230837777860-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="7024542230837777860">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c7024542230837777860-ce"></div></li><li class="comment" id="c9085862073438777442"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/05117736107025149323" rel="nofollow">bwgypyth</a></cite><span class="icon user blog-author"></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotrob956.html?showComment=1360613095202#c9085862073438777442">11. Februar 2013 um 12:04</a></span></div><p class="comment-content">Sadly I&#39;m not aware of any method to do this and I&#39;m not sure what the &quot;admin interface or debug console&quot; is. I guess you are referring to the chat window which allows you to use the &quot;/whatever&quot; commands?<br><br>This seems to be only available if you are connected to the chat server and from what I know the connection to the game server is opened when you log into a character. But I don&#39;t know of hand.<br><br>BTW: If you like to share your code with me feel free to do so. Otherwise I&#39;ll  redo lot&#39;s of the work you already did.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-957954180"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=9085862073438777442">Löschen</a></span></span></div><div class="comment-replies"><div id="c9085862073438777442-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c9085862073438777442-ra" class="thread-chrome thread-expanded"><div></div><div id="c9085862073438777442-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="9085862073438777442">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c9085862073438777442-ce"></div></li></div><div id="c1665075840301820247-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="1665075840301820247">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c1665075840301820247-ce"></div></li><li class="comment" id="c886490250328258398"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro1aba.html?showComment=1360624808520#c886490250328258398">11. Februar 2013 um 15:20</a></span></div><p class="comment-content">In the lotro.keymap there is an option &quot;toggleAdminPanel&quot; (CTRL+A) and also the DebugConsole, but there isn&#39;t shown  anything on the screen when pressed. There is also a layout inside the client_general.dat file (...Chargen_AdminPanel_Button...). Ingame, maybe the chat console could be used, but there is also something for &quot;pregame&quot;. Has anyone an idea how they have disabled it? My thoughts were a.) they disabeled the keys at character generation (CTRL+O is working at chargen) or b.) the client has to receive special packets which unlock this option. But then there must be some if then else function. I haven&#39;t found this function while debugging.<br>(I am no professional in reverse engineering)<br><br>The public key use is like xba said not important, only if you plan to authenticate users, who got an account on your p-server. This should be the last stage of such an server emu. There a other ways to implementing a auth mechanism without modifying the client.<br><br>Code? There is a lot missing, but you can have it next days.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="886490250328258398">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=886490250328258398">Löschen</a></span></span></div><div class="comment-replies"><div id="c886490250328258398-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c886490250328258398-ra" class="thread-chrome thread-expanded"><div></div><div id="c886490250328258398-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="886490250328258398">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c886490250328258398-ce"></div></li><li class="comment" id="c8829223219718449561"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/05117736107025149323" rel="nofollow">bwgypyth</a></cite><span class="icon user blog-author"></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotrocc17.html?showComment=1360628602226#c8829223219718449561">11. Februar 2013 um 16:23</a></span></div><p class="comment-content">From what I know the logic in the client is implemented in lua. IIRC the ingame API provides you some features to develop plugins and the like. But this is only available when you are actually in game. I guess the AdminPanel and DebugConsole are only useable when in game, because the lua interface is only available then. But that&#39;s blind guessing.<br><br>I&#39;m aware that the public/private key is not yet necessary. It&#39;s just something I have on the TODO list to look into one day.<br><br>Any code is good code :-)</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="8829223219718449561">Antworten</a><span class="item-control blog-admin blog-admin pid-957954180"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=8829223219718449561">Löschen</a></span></span></div><div class="comment-replies"><div id="c8829223219718449561-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c8829223219718449561-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c8337020709102546865"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="i-recently-started-hacking-on-lotro-2.html" rel="nofollow">Anonymous</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro3dfb.html?showComment=1361131163085#c8337020709102546865">17. Februar 2013 um 11:59</a></span></div><p class="comment-content">never give up</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=8337020709102546865">Löschen</a></span></span></div><div class="comment-replies"><div id="c8337020709102546865-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c8337020709102546865-ra" class="thread-chrome thread-expanded"><div></div><div id="c8337020709102546865-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="8337020709102546865">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c8337020709102546865-ce"></div></li><li class="comment" id="c6130404323836245983"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotrod78d.html?showComment=1361310082948#c6130404323836245983">19. Februar 2013 um 13:41</a></span></div><p class="comment-content">Can anyone tell me whats the logic behind the packet generation?<br><br>During session init, (udp)payload is seperated in 0x14 (0x16) &#39;payload header&#39; and the rest into ONE &#39;payload data&#39; segment.<br><br>Now the difficult part: When you are in session e.g. a [00 00 00 06] packet (without burden), there could be more than one &#39;payload data&#39; segment inside. For example the first server packet after session init, which contains the ip address. You got:<br><br>[ 01 02 02 04 00 00 00 00 00 06 81 49 | 26 00 ...] where [26 00] is the length of following ip address data. At checksum calc, for every single data part a chksum has to be generated,  this means for the server packet 4 checksums are calced and added. Which is the checksum for the whole payload data part.<br><br>Now there are other payload data segemnt, which begin different:<br><br>[01 10 01 | 00 04 | 05 03 04 00 00 00 00 00 06 | 59 00] (Client sends this after he received account/world database things) Again [00 59] is the length of the following data. [00 04] or only [04] means that there are 4 packets following. The data is to large for a single udp packet and split up.<br>Next one is<br>[ 01 10 01 00 00 05 03 04 00 00 00 00 00 06 80 EC 8|1 B0 | ]<br>The only constant thing are the 00 00 00 00 00 06 bytes.<br>Now at server side:<br>[01 12 01 00 07 08 09 04 00 00 00 00 00 06 8|1 4A|]<br><br><br>So, whats the logic behind that?!? Is this an extra header for each data part? Please comment.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=6130404323836245983">Löschen</a></span></span></div><div class="comment-replies"><div id="c6130404323836245983-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c6130404323836245983-ra" class="thread-chrome thread-expanded"><div></div><div id="c6130404323836245983-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6130404323836245983">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c6130404323836245983-ce"></div></li></div><div id="c8829223219718449561-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="8829223219718449561">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c8829223219718449561-ce"></div></li><li class="comment" id="c4862744527892868064"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro50f3.html?showComment=1361380341667#c4862744527892868064">20. Februar 2013 um 09:12</a></span></div><p class="comment-content">00 00 00 06 is a root command specifying a set of subcommands in its data segment. And yes, each entry of this subcommands has a header- and datapart again, which, you guessed correctly, is taking part into the checksum. Headergeneration is somewhat strange, either on the root commands and the subparts, and some of the sucommands describe a multi-packet blob, with a current/max counter field in the subcommand header.<br></p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="4862744527892868064">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=4862744527892868064">Löschen</a></span></span></div><div class="comment-replies"><div id="c4862744527892868064-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c4862744527892868064-ra" class="thread-chrome thread-expanded"><div></div><div id="c4862744527892868064-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="4862744527892868064">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c4862744527892868064-ce"></div></li><li class="comment" id="c7699895578238277880"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotrod9c7.html?showComment=1361650332049#c7699895578238277880">23. Februar 2013 um 12:12</a></span></div><p class="comment-content">Mhmhm... difficult to write some good parsing/generating algo for this. Let&#39;s discuss some basic packets and correct me if i&#39;m wrong:<br>(H: means found in payload-header, D: found in payload-data, C: client sends, S: server sends)<br><br>1. C/S H:[00 00 40 00] D:[00 00 00 10]<br><br>Confirms the last received sequence no? But not every sequence no.<br><br>2. C/S H:[08 00 00 02] D:[3C 00 00 00 DE FF]<br><br>Confirms length (3C) of whole packet with (DE FF) - offset 0x10, 0x11 in reversed order<br><br>3. C/S H: [08 00 40 02] D: [00 00 04 D4 | 2A 00 00 00 FA 0D]<br><br>1 &amp; 2 in one packet, first 1., then 2.<br><br>4. C/S H: [0C 00 00 02] D: [00 1B 85 CC 00 00 01 C5 | 1E 00 00 00 16 0E]<br><br>Second part confirms again length, but first 8 bytes?!?<br><br>5. C/S H:[03 00 40 02] D: [00 00 00 10 | 41 A5 16 82 BC 78 5E 0F | 9F 43 A9 B2]<br><br>First part sequence no, then 8 unknown bytes, then 4 unknown bytes. The 8 bytes maybe have something with time in commmon, but not in ticks? They start with 41 A5 ... and increase.<br><br>6. C/S H: [0B 00 00 02] D: [41 A5 16 90 AF F8 DD CA | 00 1B 85 CC | 26 00 00 00 EE 0D]<br><br>Last part is again length confirm, but the other two parts?<br><br>7. C/S H: [0F 00 00 02] D: [41 A5 16 8D FC CC 45 17 | 00 16 3F F6 9F 59 A3 55 00 00 00 00 | 26 00 00 00 39 0B]<br><br>Last part is again length confirm, but the other two parts?<br><br>8. S H: [00 00 10 00] D: [00 00 00 02 00 00 00 1F 00 00 00 20]<br><br>Request of server for lost packets<br><br>0x02 - count of seq. no<br>0x1f, 0x20 - seq. no of packets server missed and requests (again)<br><br>9. C H: [00 00 00 07] D: [ ... ]<br><br>Client resends a lost packet if there is 0x07 in header<br><br>10. C H: [00 00 80 00] D: [ nothing ]<br>Client sends &quot;terminate session&quot;<br><br>Are there any other basic packets? How about a &quot;server is full&quot; packet?<br><br>I Found this if you try to connect to server without auth before - [00 F1 00 08 | 00 20 00 02 | 00 00 00 05 DA 0E 88 2C FF E5 45 CE | 44 3B 58 00 00 00 00 00]<br><br>I would be happy, if the &quot;none coders&quot; would fire up the packet logger / decryptor and try to start analyse protocol... make notes, find equal things and sum up everything they found out. On character generation they could figure out all the values, which change, when you create a chara with this hair and that body or race...<br>This would help the project much more than requesting beta tests...</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="7699895578238277880">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=7699895578238277880">Löschen</a></span></span></div><div class="comment-replies"><div id="c7699895578238277880-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c7699895578238277880-ra" class="thread-chrome thread-expanded"><div></div><div id="c7699895578238277880-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="7699895578238277880">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c7699895578238277880-ce"></div></li><li class="comment" id="c7633370739041421166"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro420e.html?showComment=1362052438128#c7633370739041421166">28. Februar 2013 um 03:53</a></span></div><p class="comment-content">The root commands can be or&#39;ed together, thats why 1. + 2. is the same as 3. I only take care about 3. and 10. for now, and print out some debug info on 8. .<br><br>And yes, thats the main problem with nearly all the people i met here - pretend to be interested, but once you start talking techstyle or start explaining them what is necessary and how much work it will be, they&#39;re gone :-/. So far noone ever seemed to do even a little part of analyzing stuff, they took the sample code and packets, got them to work somehow and recognized that it would take them some work/brain power to bring this project further, so they dropped it. Real sad.<br><br></p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="7633370739041421166">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=7633370739041421166">Löschen</a></span></span></div><div class="comment-replies"><div id="c7633370739041421166-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c7633370739041421166-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c1310058164023935953"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro796d.html?showComment=1362090769046#c1310058164023935953">28. Februar 2013 um 14:32</a></span></div><p class="comment-content">not everyone can code, most of us looked up lotroemu and got here and realized it was the only site still active.<br><br>if you want help, i suggest you write out a meaningful guide on what the hell we should do step-by-step so easily a baby could do it.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=1310058164023935953">Löschen</a></span></span></div><div class="comment-replies"><div id="c1310058164023935953-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c1310058164023935953-ra" class="thread-chrome thread-expanded"><div></div><div id="c1310058164023935953-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="1310058164023935953">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c1310058164023935953-ce"></div></li></div><div id="c7633370739041421166-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="7633370739041421166">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c7633370739041421166-ce"></div></li><li class="comment" id="c2814239985032808432"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="i-recently-started-hacking-on-lotro188b.html?showComment=1362130167558#c2814239985032808432">1. März 2013 um 01:29</a></span></div><p class="comment-content">ooookeh ...<br><br><a href="../../../ragecollection.com/img/ragefaces/surprised.html" rel="nofollow">http://ragecollection.com/img/ragefaces/surprised.png</a><br><br>... i think you didnt catch my point here.<br><br>Never mind.<br></p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="2814239985032808432">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=2814239985032808432">Löschen</a></span></span></div><div class="comment-replies"><div id="c2814239985032808432-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c2814239985032808432-ra" class="thread-chrome thread-expanded"><div></div><div id="c2814239985032808432-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="2814239985032808432">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c2814239985032808432-ce"></div></li></ol><div id="top-continue" class="continue"><a class="comment-reply" target="_self">Kommentar hinzufügen</a></div><div class="comment-replybox-thread" id="top-ce"></div><div class="loadmore hidden" data-post-id="3653141589936136182"><a target="_self">Weitere laden...</a></div></div>
+</div>
+</div>
+<p class='comment-footer'>
+<div class='comment-form'>
+<a name='comment-form'></a>
+<p>
+</p>
+<a href='https://www.blogger.com/comment-iframe.g?blogID=5998090735925918818&amp;postID=3653141589936136182' id='comment-editor-src'></a>
+<iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' frameborder='0' height='410px' id='comment-editor' name='comment-editor' src='#' width='100%'></iframe>
+<script src='../../../www.blogger.com/static/v1/jsbin/1068921344-comment_from_post_iframe.js' type='text/javascript'></script>
+<script type='text/javascript'>
+      BLOG_CMT_createIframe('https://www.blogger.com/rpc_relay.html');
+    </script>
+</div>
+</p>
+<div id='backlinks-container'>
+<div id='Blog1_backlinks-container'>
+</div>
+</div>
+</div>
+</div>
+
+        </div></div>
+      
+</div>
+<div class='blog-pager' id='blog-pager'>
+<span id='blog-pager-newer-link'>
+<a class='blog-pager-newer-link' href='../../2013/03/updates-investigation-documents-and.html' id='Blog1_blog-pager-newer-link' title='Neuerer Post'>Neuerer Post</a>
+</span>
+<span id='blog-pager-older-link'>
+<a class='blog-pager-older-link' href='../03/decryption-and-encryption-progress.html' id='Blog1_blog-pager-older-link' title='Älterer Post'>Älterer Post</a>
+</span>
+<a class='home-link' href='../../index.html'>Startseite</a>
+</div>
+<div class='clear'></div>
+<div class='post-feeds'>
+<div class='feed-links'>
+Abonnieren
+<a class='feed-link' href='../../feeds/3653141589936136182/comments/default' target='_blank' type='application/atom+xml'>Kommentare zum Post (Atom)</a>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+<div class='column-left-outer'>
+<div class='column-left-inner'>
+<aside>
+</aside>
+</div>
+</div>
+<div class='column-right-outer'>
+<div class='column-right-inner'>
+<aside>
+<div class='sidebar section' id='sidebar-right-1'><div class='widget BlogArchive' data-version='1' id='BlogArchive2'>
+<h2>Blog-Archiv</h2>
+<div class='widget-content'>
+<div id='ArchiveList'>
+<div id='BlogArchive2_ArchiveList'>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2016/index.html'>
+2016
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2016/11/index.html'>
+November
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2016/10/index.html'>
+Oktober
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2015/index.html'>
+2015
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2015/04/index.html'>
+April
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2014/index.html'>
+2014
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2014/06/index.html'>
+Juni
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2013/index.html'>
+2013
+</a>
+<span class='post-count' dir='ltr'>(11)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2013/10/index.html'>
+Oktober
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2013/09/index.html'>
+September
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2013/03/index.html'>
+März
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>
+
+        &#9660;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../index.html'>
+2012
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>
+
+        &#9660;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='index.html'>
+Juli
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='i-recently-started-hacking-on-lotro.html'>Revamping the work</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../03/index.html'>
+März
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2011/index.html'>
+2011
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2011/12/index.html'>
+Dezember
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2010/index.html'>
+2010
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2010/10/index.html'>
+Oktober
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2010/04/index.html'>
+April
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2010/01/index.html'>
+Januar
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/index.html'>
+2009
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/12/index.html'>
+Dezember
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/07/index.html'>
+Juli
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/02/index.html'>
+Februar
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/01/index.html'>
+Januar
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=5998090735925918818&amp;widgetType=BlogArchive&amp;widgetId=BlogArchive2&amp;action=editWidget&amp;sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("BlogArchive2"));' rel='nofollow' target='configBlogArchive2' title='Bearbeiten'>
+<img alt='' height='18' src='../../../resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div></div>
+<table border='0' cellpadding='0' cellspacing='0' class='section-columns columns-2'>
+<tbody>
+<tr>
+<td class='first columns-cell'>
+<div class='sidebar no-items section' id='sidebar-right-2-1'></div>
+</td>
+<td class='columns-cell'>
+<div class='sidebar no-items section' id='sidebar-right-2-2'></div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class='sidebar no-items section' id='sidebar-right-3'></div>
+</aside>
+</div>
+</div>
+</div>
+<div style='clear: both'></div>
+<!-- columns -->
+</div>
+<!-- main -->
+</div>
+</div>
+<div class='main-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<footer>
+<div class='footer-outer'>
+<div class='footer-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left footer-fauxborder-left'>
+<div class='fauxborder-right footer-fauxborder-right'></div>
+<div class='region-inner footer-inner'>
+<div class='foot no-items section' id='footer-1'></div>
+<table border='0' cellpadding='0' cellspacing='0' class='section-columns columns-2'>
+<tbody>
+<tr>
+<td class='first columns-cell'>
+<div class='foot no-items section' id='footer-2-1'></div>
+</td>
+<td class='columns-cell'>
+<div class='foot no-items section' id='footer-2-2'></div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- outside of the include in order to lock Attribution widget -->
+<div class='foot section' id='footer-3' name='Footer'><div class='widget Attribution' data-version='1' id='Attribution1'>
+<div class='widget-content' style='text-align: center;'>
+Design "Einfach". Powered by <a href='https://www.blogger.com/' target='_blank'>Blogger</a>.
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=5998090735925918818&amp;widgetType=Attribution&amp;widgetId=Attribution1&amp;action=editWidget&amp;sectionId=footer-3' onclick='return _WidgetManager._PopupConfig(document.getElementById("Attribution1"));' rel='nofollow' target='configAttribution1' title='Bearbeiten'>
+<img alt='' height='18' src='../../../resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div></div>
+</div>
+</div>
+<div class='footer-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</footer>
+<!-- content -->
+</div>
+</div>
+<div class='content-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<script type='text/javascript'>
+    window.setTimeout(function() {
+        document.body.className = document.body.className.replace('loading', '');
+      }, 10);
+  </script>
+
+<script type="text/javascript" src="../../../www.blogger.com/static/v1/widgets/389203291-widgets.js"></script>
+<script type='text/javascript'>
+window['__wavt'] = 'AOuZoY4q-hDd13N3_rkbamP8P5U_nWcoJA:1602195138111';_WidgetManager._Init('//www.blogger.com/rearrange?blogID\x3d5998090735925918818','i-recently-started-hacking-on-lotro.html','5998090735925918818');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'blogId': '5998090735925918818', 'title': 'lotro revenge', 'url': 'http://bwgypyth.blogspot.com/2012/07/i-recently-started-hacking-on-lotro.html', 'canonicalUrl': 'http://bwgypyth.blogspot.com/2012/07/i-recently-started-hacking-on-lotro.html', 'homepageUrl': 'http://bwgypyth.blogspot.com/', 'searchUrl': 'http://bwgypyth.blogspot.com/search', 'canonicalHomepageUrl': 'http://bwgypyth.blogspot.com/', 'blogspotFaviconUrl': 'http://bwgypyth.blogspot.com/favicon.ico', 'bloggerUrl': 'https://www.blogger.com', 'hasCustomDomain': false, 'httpsEnabled': true, 'enabledCommentProfileImages': true, 'gPlusViewType': 'FILTERED_POSTMOD', 'adultContent': false, 'analyticsAccountNumber': '', 'encoding': 'UTF-8', 'locale': 'de', 'localeUnderscoreDelimited': 'de', 'languageDirection': 'ltr', 'isPrivate': false, 'isMobile': false, 'isMobileRequest': false, 'mobileClass': '', 'isPrivateBlog': false, 'isDynamicViewsAvailable': true, 'feedLinks': '\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22lotro revenge - Atom\x22 href\x3d\x22http://bwgypyth.blogspot.com/feeds/posts/default\x22 /\x3e\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/rss+xml\x22 title\x3d\x22lotro revenge - RSS\x22 href\x3d\x22http://bwgypyth.blogspot.com/feeds/posts/default?alt\x3drss\x22 /\x3e\n\x3clink rel\x3d\x22service.post\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22lotro revenge - Atom\x22 href\x3d\x22https://www.blogger.com/feeds/5998090735925918818/posts/default\x22 /\x3e\n\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22lotro revenge - Atom\x22 href\x3d\x22http://bwgypyth.blogspot.com/feeds/3653141589936136182/comments/default\x22 /\x3e\n', 'meTag': '', 'adsenseHostId': 'ca-host-pub-1556223355139109', 'adsenseHasAds': false, 'ieCssRetrofitLinks': '\x3c!--[if IE]\x3e\x3cscript type\x3d\x22text/javascript\x22 src\x3d\x22https://www.blogger.com/static/v1/jsbin/4244862144-ieretrofit.js\x22\x3e\x3c/script\x3e\n\x3c![endif]--\x3e', 'view': '', 'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/4224c15c4e7c9321/js/comments.js', 'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/e935819f51c62627', 'plusOneApiSrc': 'https://apis.google.com/js/plusone.js', 'disableGComments': true, 'sharing': {'platforms': [{'name': 'Link abrufen', 'key': 'link', 'shareMessage': 'Link abrufen', 'target': ''}, {'name': 'Facebook', 'key': 'facebook', 'shareMessage': 'Über Facebook teilen', 'target': 'facebook'}, {'name': 'BlogThis!', 'key': 'blogThis', 'shareMessage': 'BlogThis!', 'target': 'blog'}, {'name': 'Twitter', 'key': 'twitter', 'shareMessage': 'Über Twitter teilen', 'target': 'twitter'}, {'name': 'Pinterest', 'key': 'pinterest', 'shareMessage': 'Über Pinterest teilen', 'target': 'pinterest'}, {'name': 'E-Mail', 'key': 'email', 'shareMessage': 'E-Mail', 'target': 'email'}], 'disableGooglePlus': true, 'googlePlusShareButtonWidth': 300, 'googlePlusBootstrap': '\x3cscript type\x3d\x22text/javascript\x22\x3ewindow.___gcfg \x3d {\x27lang\x27: \x27de\x27};\x3c/script\x3e'}, 'hasCustomJumpLinkMessage': false, 'jumpLinkMessage': 'Mehr anzeigen', 'pageType': 'item', 'postId': '3653141589936136182', 'pageName': 'Revamping the work', 'pageTitle': 'lotro revenge: Revamping the work'}}, {'name': 'features', 'data': {'sharing_get_link_dialog': 'true', 'sharing_native': 'false'}}, {'name': 'messages', 'data': {'edit': 'Bearbeiten', 'linkCopiedToClipboard': 'Link in Zwischenablage kopiert.', 'ok': 'OK', 'postLink': 'Link zum Post'}}, {'name': 'template', 'data': {'name': 'Simple', 'localizedName': 'Einfach', 'isResponsive': false, 'isAlternateRendering': false, 'isCustom': false, 'variant': 'pale', 'variantId': 'pale'}}, {'name': 'view', 'data': {'classic': {'name': 'classic', 'url': '?view\x3dclassic'}, 'flipcard': {'name': 'flipcard', 'url': '?view\x3dflipcard'}, 'magazine': {'name': 'magazine', 'url': '?view\x3dmagazine'}, 'mosaic': {'name': 'mosaic', 'url': '?view\x3dmosaic'}, 'sidebar': {'name': 'sidebar', 'url': '?view\x3dsidebar'}, 'snapshot': {'name': 'snapshot', 'url': '?view\x3dsnapshot'}, 'timeslide': {'name': 'timeslide', 'url': '?view\x3dtimeslide'}, 'isMobile': false, 'title': 'Revamping the work', 'description': 'I recently started hacking on lotro again, trying to figure out the checksumming. Right now I fail to understand how it works, eve hough tAm...', 'url': 'http://bwgypyth.blogspot.com/2012/07/i-recently-started-hacking-on-lotro.html', 'type': 'item', 'isSingleItem': true, 'isMultipleItems': false, 'isError': false, 'isPage': false, 'isPost': true, 'isHomepage': false, 'isArchive': false, 'isLabelSearch': false, 'postId': 3653141589936136182}}]);
+_WidgetManager._RegisterWidget('_NavbarView', new _WidgetInfo('Navbar1', 'navbar', document.getElementById('Navbar1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'header', document.getElementById('Header1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'lightboxEnabled': true, 'lightboxModuleUrl': 'https://www.blogger.com/static/v1/jsbin/3554439735-lbx__de.js', 'lightboxCssUrl': 'https://www.blogger.com/static/v1/v-css/368954415-lightbox_bundle.css'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogArchiveView', new _WidgetInfo('BlogArchive2', 'sidebar-right-1', document.getElementById('BlogArchive2'), {'languageDirection': 'ltr', 'loadingMessage': 'Wird geladen\x26hellip;'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_AttributionView', new _WidgetInfo('Attribution1', 'footer-3', document.getElementById('Attribution1'), {}, 'displayModeFull'));
+</script>
+</body>
+
+<!-- Mirrored from bwgypyth.blogspot.com/2012/07/i-recently-started-hacking-on-lotro.html?showComment=1418725902353 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Oct 2020 22:13:36 GMT -->
+</html>

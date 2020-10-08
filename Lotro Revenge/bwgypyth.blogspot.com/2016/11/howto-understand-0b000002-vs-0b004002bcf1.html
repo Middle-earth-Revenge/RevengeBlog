@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html class='v2' dir='ltr' lang='de'>
+
+<!-- Mirrored from bwgypyth.blogspot.com/2016/11/howto-understand-0b000002-vs-0b004002.html?showComment=1597664159889 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Oct 2020 22:10:56 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<link href='../../../www.blogger.com/static/v1/widgets/3416767676-css_bundle_v2.css' rel='stylesheet' type='text/css'/>
+<meta content='width=1100' name='viewport'/>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+<meta content='blogger' name='generator'/>
+<link href='../../favicon.ico' rel='icon' type='image/x-icon'/>
+<link href='howto-understand-0b000002-vs-0b004002.html' rel='canonical'/>
+<link rel="alternate" type="application/atom+xml" title="lotro revenge - Atom" href="../../feeds/posts/default" />
+<link rel="alternate" type="application/rss+xml" title="lotro revenge - RSS" href="../../feeds/posts/default9522?alt=rss" />
+<link rel="service.post" type="application/atom+xml" title="lotro revenge - Atom" href="https://www.blogger.com/feeds/5998090735925918818/posts/default" />
+
+<link rel="alternate" type="application/atom+xml" title="lotro revenge - Atom" href="../../feeds/5443309192279437670/comments/default" />
+<!--[if IE]><script type="text/javascript" src="https://www.blogger.com/static/v1/jsbin/4244862144-ieretrofit.js"></script>
+<![endif]-->
+<meta content='http://bwgypyth.blogspot.com/2016/11/howto-understand-0b000002-vs-0b004002.html' property='og:url'/>
+<meta content='HowTo: Understand 0B000002 vs. 0B004002 packets' property='og:title'/>
+<meta content='The 0B000002 and 0B004002 are both ping pong packets (i.e. they are exchanged between client and server without any user input, just to conf...' property='og:description'/>
+<!--[if IE]> <script> (function() { var html5 = ("abbr,article,aside,audio,canvas,datalist,details," + "figure,footer,header,hgroup,mark,menu,meter,nav,output," + "progress,section,time,video").split(','); for (var i = 0; i < html5.length; i++) { document.createElement(html5[i]); } try { document.execCommand('BackgroundImageCache', false, true); } catch(e) {} })(); </script> <![endif]-->
+<title>lotro revenge: HowTo: Understand 0B000002 vs. 0B004002 packets</title>
+<style id='page-skin-1' type='text/css'><!--
+/*
+-----------------------------------------------
+Blogger Template Style
+Name:     Simple
+Designer: Blogger
+URL:      www.blogger.com
+----------------------------------------------- */
+/* Content
+----------------------------------------------- */
+body {
+font: normal normal 12px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #222222;
+background: #66bbdd none repeat scroll top left;
+padding: 0 40px 40px 40px;
+}
+html body .region-inner {
+min-width: 0;
+max-width: 100%;
+width: auto;
+}
+h2 {
+font-size: 22px;
+}
+a:link {
+text-decoration:none;
+color: #2288bb;
+}
+a:visited {
+text-decoration:none;
+color: #888888;
+}
+a:hover {
+text-decoration:underline;
+color: #33aaff;
+}
+.body-fauxcolumn-outer .fauxcolumn-inner {
+background: transparent url(../../../resources.blogblog.com/blogblog/data/1kt/simple/body_gradient_tile_light.png) repeat scroll top left;
+_background-image: none;
+}
+.body-fauxcolumn-outer .cap-top {
+position: absolute;
+z-index: 1;
+height: 400px;
+width: 100%;
+}
+.body-fauxcolumn-outer .cap-top .cap-left {
+width: 100%;
+background: transparent url(../../../resources.blogblog.com/blogblog/data/1kt/simple/gradients_light.png) repeat-x scroll top left;
+_background-image: none;
+}
+.content-outer {
+-moz-box-shadow: 0 0 40px rgba(0, 0, 0, .15);
+-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+-goog-ms-box-shadow: 0 0 10px #333333;
+box-shadow: 0 0 40px rgba(0, 0, 0, .15);
+margin-bottom: 1px;
+}
+.content-inner {
+padding: 10px 10px;
+}
+.content-inner {
+background-color: #ffffff;
+}
+/* Header
+----------------------------------------------- */
+.header-outer {
+background: transparent none repeat-x scroll 0 -400px;
+_background-image: none;
+}
+.Header h1 {
+font: normal normal 60px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #3399bb;
+text-shadow: -1px -1px 1px rgba(0, 0, 0, .2);
+}
+.Header h1 a {
+color: #3399bb;
+}
+.Header .description {
+font-size: 140%;
+color: #777777;
+}
+.header-inner .Header .titlewrapper {
+padding: 22px 30px;
+}
+.header-inner .Header .descriptionwrapper {
+padding: 0 30px;
+}
+/* Tabs
+----------------------------------------------- */
+.tabs-inner .section:first-child {
+border-top: 1px solid #eeeeee;
+}
+.tabs-inner .section:first-child ul {
+margin-top: -1px;
+border-top: 1px solid #eeeeee;
+border-left: 0 solid #eeeeee;
+border-right: 0 solid #eeeeee;
+}
+.tabs-inner .widget ul {
+background: #f5f5f5 url(../../../resources.blogblog.com/blogblog/data/1kt/simple/gradients_light.png) repeat-x scroll 0 -800px;
+_background-image: none;
+border-bottom: 1px solid #eeeeee;
+margin-top: 0;
+margin-left: -30px;
+margin-right: -30px;
+}
+.tabs-inner .widget li a {
+display: inline-block;
+padding: .6em 1em;
+font: normal normal 14px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #999999;
+border-left: 1px solid #ffffff;
+border-right: 1px solid #eeeeee;
+}
+.tabs-inner .widget li:first-child a {
+border-left: none;
+}
+.tabs-inner .widget li.selected a, .tabs-inner .widget li a:hover {
+color: #000000;
+background-color: #eeeeee;
+text-decoration: none;
+}
+/* Columns
+----------------------------------------------- */
+.main-outer {
+border-top: 0 solid #eeeeee;
+}
+.fauxcolumn-left-outer .fauxcolumn-inner {
+border-right: 1px solid #eeeeee;
+}
+.fauxcolumn-right-outer .fauxcolumn-inner {
+border-left: 1px solid #eeeeee;
+}
+/* Headings
+----------------------------------------------- */
+div.widget > h2,
+div.widget h2.title {
+margin: 0 0 1em 0;
+font: normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #000000;
+}
+/* Widgets
+----------------------------------------------- */
+.widget .zippy {
+color: #999999;
+text-shadow: 2px 2px 1px rgba(0, 0, 0, .1);
+}
+.widget .popular-posts ul {
+list-style: none;
+}
+/* Posts
+----------------------------------------------- */
+h2.date-header {
+font: normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+}
+.date-header span {
+background-color: transparent;
+color: #222222;
+padding: inherit;
+letter-spacing: inherit;
+margin: inherit;
+}
+.main-inner {
+padding-top: 30px;
+padding-bottom: 30px;
+}
+.main-inner .column-center-inner {
+padding: 0 15px;
+}
+.main-inner .column-center-inner .section {
+margin: 0 15px;
+}
+.post {
+margin: 0 0 25px 0;
+}
+h3.post-title, .comments h4 {
+font: normal normal 22px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+margin: .75em 0 0;
+}
+.post-body {
+font-size: 110%;
+line-height: 1.4;
+position: relative;
+}
+.post-body img, .post-body .tr-caption-container, .Profile img, .Image img,
+.BlogList .item-thumbnail img {
+padding: 2px;
+background: #ffffff;
+border: 1px solid #eeeeee;
+-moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+}
+.post-body img, .post-body .tr-caption-container {
+padding: 5px;
+}
+.post-body .tr-caption-container {
+color: #222222;
+}
+.post-body .tr-caption-container img {
+padding: 0;
+background: transparent;
+border: none;
+-moz-box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+-webkit-box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+}
+.post-header {
+margin: 0 0 1.5em;
+line-height: 1.6;
+font-size: 90%;
+}
+.post-footer {
+margin: 20px -2px 0;
+padding: 5px 10px;
+color: #666666;
+background-color: #f9f9f9;
+border-bottom: 1px solid #eeeeee;
+line-height: 1.6;
+font-size: 90%;
+}
+#comments .comment-author {
+padding-top: 1.5em;
+border-top: 1px solid #eeeeee;
+background-position: 0 1.5em;
+}
+#comments .comment-author:first-child {
+padding-top: 0;
+border-top: none;
+}
+.avatar-image-container {
+margin: .2em 0 0;
+}
+#comments .avatar-image-container img {
+border: 1px solid #eeeeee;
+}
+/* Comments
+----------------------------------------------- */
+.comments .comments-content .icon.blog-author {
+background-repeat: no-repeat;
+background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9sLFwMeCjjhcOMAAAD+SURBVDjLtZSvTgNBEIe/WRRnm3U8RC1neQdsm1zSBIU9VVF1FkUguQQsD9ITmD7ECZIJSE4OZo9stoVjC/zc7ky+zH9hXwVwDpTAWWLrgS3QAe8AZgaAJI5zYAmc8r0G4AHYHQKVwII8PZrZFsBFkeRCABYiMh9BRUhnSkPTNCtVXYXURi1FpBDgArj8QU1eVXUzfnjv7yP7kwu1mYrkWlU33vs1QNu2qU8pwN0UpKoqokjWwCztrMuBhEhmh8bD5UDqur75asbcX0BGUB9/HAMB+r32hznJgXy2v0sGLBcyAJ1EK3LFcbo1s91JeLwAbwGYu7TP/3ZGfnXYPgAVNngtqatUNgAAAABJRU5ErkJggg==);
+}
+.comments .comments-content .loadmore a {
+border-top: 1px solid #999999;
+border-bottom: 1px solid #999999;
+}
+.comments .comment-thread.inline-thread {
+background-color: #f9f9f9;
+}
+.comments .continue {
+border-top: 2px solid #999999;
+}
+/* Accents
+---------------------------------------------- */
+.section-columns td.columns-cell {
+border-left: 1px solid #eeeeee;
+}
+.blog-pager {
+background: transparent none no-repeat scroll top center;
+}
+.blog-pager-older-link, .home-link,
+.blog-pager-newer-link {
+background-color: #ffffff;
+padding: 5px;
+}
+.footer-outer {
+border-top: 0 dashed #bbbbbb;
+}
+/* Mobile
+----------------------------------------------- */
+body.mobile  {
+background-size: auto;
+}
+.mobile .body-fauxcolumn-outer {
+background: transparent none repeat scroll top left;
+}
+.mobile .body-fauxcolumn-outer .cap-top {
+background-size: 100% auto;
+}
+.mobile .content-outer {
+-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+}
+.mobile .tabs-inner .widget ul {
+margin-left: 0;
+margin-right: 0;
+}
+.mobile .post {
+margin: 0;
+}
+.mobile .main-inner .column-center-inner .section {
+margin: 0;
+}
+.mobile .date-header span {
+padding: 0.1em 10px;
+margin: 0 -10px;
+}
+.mobile h3.post-title {
+margin: 0;
+}
+.mobile .blog-pager {
+background: transparent none no-repeat scroll top center;
+}
+.mobile .footer-outer {
+border-top: none;
+}
+.mobile .main-inner, .mobile .footer-inner {
+background-color: #ffffff;
+}
+.mobile-index-contents {
+color: #222222;
+}
+.mobile-link-button {
+background-color: #2288bb;
+}
+.mobile-link-button a:link, .mobile-link-button a:visited {
+color: #ffffff;
+}
+.mobile .tabs-inner .section:first-child {
+border-top: none;
+}
+.mobile .tabs-inner .PageList .widget-content {
+background-color: #eeeeee;
+color: #000000;
+border-top: 1px solid #eeeeee;
+border-bottom: 1px solid #eeeeee;
+}
+.mobile .tabs-inner .PageList .widget-content .pagelist-arrow {
+border-left: 1px solid #eeeeee;
+}
+
+--></style>
+<style id='template-skin-1' type='text/css'><!--
+body {
+min-width: 960px;
+}
+.content-outer, .content-fauxcolumn-outer, .region-inner {
+min-width: 960px;
+max-width: 960px;
+_width: 960px;
+}
+.main-inner .columns {
+padding-left: 0;
+padding-right: 310px;
+}
+.main-inner .fauxcolumn-center-outer {
+left: 0;
+right: 310px;
+/* IE6 does not respect left and right together */
+_width: expression(this.parentNode.offsetWidth -
+parseInt("0") -
+parseInt("310px") + 'px');
+}
+.main-inner .fauxcolumn-left-outer {
+width: 0;
+}
+.main-inner .fauxcolumn-right-outer {
+width: 310px;
+}
+.main-inner .column-left-outer {
+width: 0;
+right: 100%;
+margin-left: -0;
+}
+.main-inner .column-right-outer {
+width: 310px;
+margin-right: -310px;
+}
+#layout {
+min-width: 0;
+}
+#layout .content-outer {
+min-width: 0;
+width: 800px;
+}
+#layout .region-inner {
+min-width: 0;
+width: auto;
+}
+body#layout div.add_widget {
+padding: 8px;
+}
+body#layout div.add_widget a {
+margin-left: 32px;
+}
+--></style>
+<link href='../../../www.blogger.com/dyn-css/authorizationde36.css?targetBlogID=5998090735925918818&amp;zx=10b1f290-4e62-4c93-9781-c7579685fd39' media='none' onload='if(media!=&#39;all&#39;)media=&#39;all&#39;' rel='stylesheet'/><noscript><link href='../../../www.blogger.com/dyn-css/authorizationde36.css?targetBlogID=5998090735925918818&amp;zx=10b1f290-4e62-4c93-9781-c7579685fd39' rel='stylesheet'/></noscript>
+
+</head>
+<body class='loading variant-pale'>
+<div class='navbar section' id='navbar' name='Navbar'><div class='widget Navbar' data-version='1' id='Navbar1'><script type="text/javascript">
+    function setAttributeOnload(object, attribute, val) {
+      if(window.addEventListener) {
+        window.addEventListener('load',
+          function(){ object[attribute] = val; }, false);
+      } else {
+        window.attachEvent('onload', function(){ object[attribute] = val; });
+      }
+    }
+  </script>
+<div id="navbar-iframe-container"></div>
+<script type="text/javascript" src="../../../apis.google.com/js/plusone.js"></script>
+<script type="text/javascript">
+      gapi.load("gapi.iframes:gapi.iframes.style.bubble", function() {
+        if (gapi.iframes && gapi.iframes.getContext) {
+          gapi.iframes.getContext().openChild({
+              url: 'https://www.blogger.com/navbar.g?targetBlogID\x3d5998090735925918818\x26blogName\x3dlotro+revenge\x26publishMode\x3dPUBLISH_MODE_BLOGSPOT\x26navbarType\x3dLIGHT\x26layoutType\x3dLAYOUTS\x26searchRoot\x3dhttps://bwgypyth.blogspot.com/search\x26blogLocale\x3dde\x26v\x3d2\x26homepageUrl\x3dhttp://bwgypyth.blogspot.com/\x26targetPostID\x3d5443309192279437670\x26blogPostOrPageUrl\x3dhttp://bwgypyth.blogspot.com/2016/11/howto-understand-0b000002-vs-0b004002.html\x26vt\x3d-8405190390220800992',
+              where: document.getElementById("navbar-iframe-container"),
+              id: "navbar-iframe"
+          });
+        }
+      });
+    </script><script type="text/javascript">
+(function() {
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.src = '../../../pagead2.googlesyndication.com/pagead/js/f.txt';
+var head = document.getElementsByTagName('head')[0];
+if (head) {
+head.appendChild(script);
+}})();
+</script>
+</div></div>
+<div class='body-fauxcolumns'>
+<div class='fauxcolumn-outer body-fauxcolumn-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<div class='content'>
+<div class='content-fauxcolumns'>
+<div class='fauxcolumn-outer content-fauxcolumn-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<div class='content-outer'>
+<div class='content-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left content-fauxborder-left'>
+<div class='fauxborder-right content-fauxborder-right'></div>
+<div class='content-inner'>
+<header>
+<div class='header-outer'>
+<div class='header-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left header-fauxborder-left'>
+<div class='fauxborder-right header-fauxborder-right'></div>
+<div class='region-inner header-inner'>
+<div class='header section' id='header' name='Header'><div class='widget Header' data-version='1' id='Header1'>
+<div id='header-inner'>
+<div class='titlewrapper'>
+<h1 class='title'>
+<a href='../../index.html'>
+lotro revenge
+</a>
+</h1>
+</div>
+<div class='descriptionwrapper'>
+<p class='description'><span>A blog about gathering internal information about LOTRO.</span></p>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+<div class='header-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</header>
+<div class='tabs-outer'>
+<div class='tabs-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left tabs-fauxborder-left'>
+<div class='fauxborder-right tabs-fauxborder-right'></div>
+<div class='region-inner tabs-inner'>
+<div class='tabs no-items section' id='crosscol' name='Spaltenübergreifend'></div>
+<div class='tabs no-items section' id='crosscol-overflow' name='Cross-Column 2'></div>
+</div>
+</div>
+<div class='tabs-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='main-outer'>
+<div class='main-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left main-fauxborder-left'>
+<div class='fauxborder-right main-fauxborder-right'></div>
+<div class='region-inner main-inner'>
+<div class='columns fauxcolumns'>
+<div class='fauxcolumn-outer fauxcolumn-center-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='fauxcolumn-outer fauxcolumn-left-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='fauxcolumn-outer fauxcolumn-right-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<!-- corrects IE6 width calculation -->
+<div class='columns-inner'>
+<div class='column-center-outer'>
+<div class='column-center-inner'>
+<div class='main section' id='main' name='Hauptbereich'><div class='widget Blog' data-version='1' id='Blog1'>
+<div class='blog-posts hfeed'>
+
+          <div class="date-outer">
+        
+<h2 class='date-header'><span>Montag, 7. November 2016</span></h2>
+
+          <div class="date-posts">
+        
+<div class='post-outer'>
+<div class='post hentry uncustomized-post-template' itemprop='blogPost' itemscope='itemscope' itemtype='http://schema.org/BlogPosting'>
+<meta content='5998090735925918818' itemprop='blogId'/>
+<meta content='5443309192279437670' itemprop='postId'/>
+<a name='5443309192279437670'></a>
+<h3 class='post-title entry-title' itemprop='name'>
+HowTo: Understand 0B000002 vs. 0B004002 packets
+</h3>
+<div class='post-header'>
+<div class='post-header-line-1'></div>
+</div>
+<div class='post-body entry-content' id='post-body-5443309192279437670' itemprop='description articleBody'>
+The&nbsp;0B000002 and&nbsp;0B004002 are both ping pong packets (i.e. they are exchanged between client and server without any user input, just to confirm the connection works). What makes them really interesting is that they are quite different, but very similar.<br />
+<br />
+Let me explain: The 0B000002 has 18 bytes of body, while the 0B004002 has 22 bytes, a difference of four bytes. The body if 0B004002 is offset by these 4 bytes.<br />
+<br />
+<table>
+<tbody>
+<tr><th>Meaning</th><th>Bytes 0B000002</th><th>Bytes 0B004002</th></tr>
+<tr><td>Sequence number of the last packet seen from "the other side"</td><td>N/A</td><td>0x14 - 0x17</td></tr>
+<tr><td>Value specified in the 01000006 packet sent by the server</td><td>0x14 - 0x17</td><td>0x18 - 0x1b</td></tr>
+<tr><td>Unknown, but constantly increasing number</td><td>0x18 - 0x1b</td><td>0x1c - 0x1f</td></tr>
+<tr><td>Client/Server uptime?</td><td>0x1c - 0x21</td><td>0x20 - 0x25</td></tr>
+<tr><td>Byteswapped confirmation that a packet group was received (e.g. 0x0000ebff will be sent by the client, when all packets of the group ffeb are received)</td><td>0x12 - 0x25</td><td>0x26 - 0x29</td></tr>
+</tbody></table>
+<br />
+<div>
+As you can see both packets share the same payload, but the&nbsp;0B004002 one also ships upfront the sequence number of the last packet received by the other side of the communication.</div>
+<div style='clear: both;'></div>
+</div>
+<div class='post-footer'>
+<div class='post-footer-line post-footer-line-1'>
+<span class='post-author vcard'>
+Eingestellt von
+<span class='fn' itemprop='author' itemscope='itemscope' itemtype='http://schema.org/Person'>
+<meta content='https://www.blogger.com/profile/05117736107025149323' itemprop='url'/>
+<a class='g-profile' href='https://www.blogger.com/profile/05117736107025149323' rel='author' title='author profile'>
+<span itemprop='name'>bwgypyth</span>
+</a>
+</span>
+</span>
+<span class='post-timestamp'>
+um
+<meta content='http://bwgypyth.blogspot.com/2016/11/howto-understand-0b000002-vs-0b004002.html' itemprop='url'/>
+<a class='timestamp-link' href='howto-understand-0b000002-vs-0b004002.html' rel='bookmark' title='permanent link'><abbr class='published' itemprop='datePublished' title='2016-11-07T04:03:00-08:00'>04:03</abbr></a>
+</span>
+<span class='reaction-buttons'>
+</span>
+<span class='post-comment-link'>
+</span>
+<span class='post-icons'>
+<span class='item-control blog-admin pid-957954180'>
+<a href='https://www.blogger.com/post-edit.g?blogID=5998090735925918818&amp;postID=5443309192279437670&amp;from=pencil' title='Post bearbeiten'>
+<img alt='' class='icon-action' height='18' src='../../../resources.blogblog.com/img/icon18_edit_allbkg.gif' width='18'/>
+</a>
+</span>
+</span>
+<div class='post-share-buttons goog-inline-block'>
+</div>
+</div>
+<div class='post-footer-line post-footer-line-2'>
+<span class='post-labels'>
+</span>
+</div>
+<div class='post-footer-line post-footer-line-3'>
+<span class='post-location'>
+</span>
+</div>
+</div>
+</div>
+<div class='comments' id='comments'>
+<a name='comments'></a>
+<h4> Kommentare:</h4>
+<div class='comments-content'>
+<script async='async' src='#' type='text/javascript'></script>
+<script type='text/javascript'>
+    (function() {
+      var items = null;
+      var msgs = null;
+      var config = {};
+
+// <![CDATA[
+      var cursor = null;
+      if (items && items.length > 0) {
+        cursor = parseInt(items[items.length - 1].timestamp) + 1;
+      }
+
+      var bodyFromEntry = function(entry) {
+        var text = (entry &&
+                    ((entry.content && entry.content.$t) ||
+                     (entry.summary && entry.summary.$t))) ||
+            '';
+        if (entry && entry.gd$extendedProperty) {
+          for (var k in entry.gd$extendedProperty) {
+            if (entry.gd$extendedProperty[k].name == 'blogger.contentRemoved') {
+              return '<span class="deleted-comment">' + text + '</span>';
+            }
+          }
+        }
+        return text;
+      }
+
+      var parse = function(data) {
+        cursor = null;
+        var comments = [];
+        if (data && data.feed && data.feed.entry) {
+          for (var i = 0, entry; entry = data.feed.entry[i]; i++) {
+            var comment = {};
+            // comment ID, parsed out of the original id format
+            var id = /blog-(\d+).post-(\d+)/.exec(entry.id.$t);
+            comment.id = id ? id[2] : null;
+            comment.body = bodyFromEntry(entry);
+            comment.timestamp = Date.parse(entry.published.$t) + '';
+            if (entry.author && entry.author.constructor === Array) {
+              var auth = entry.author[0];
+              if (auth) {
+                comment.author = {
+                  name: (auth.name ? auth.name.$t : undefined),
+                  profileUrl: (auth.uri ? auth.uri.$t : undefined),
+                  avatarUrl: (auth.gd$image ? auth.gd$image.src : undefined)
+                };
+              }
+            }
+            if (entry.link) {
+              if (entry.link[2]) {
+                comment.link = comment.permalink = entry.link[2].href;
+              }
+              if (entry.link[3]) {
+                var pid = /.*comments\/default\/(\d+)\?.*/.exec(entry.link[3].href);
+                if (pid && pid[1]) {
+                  comment.parentId = pid[1];
+                }
+              }
+            }
+            comment.deleteclass = 'item-control blog-admin';
+            if (entry.gd$extendedProperty) {
+              for (var k in entry.gd$extendedProperty) {
+                if (entry.gd$extendedProperty[k].name == 'blogger.itemClass') {
+                  comment.deleteclass += ' ' + entry.gd$extendedProperty[k].value;
+                } else if (entry.gd$extendedProperty[k].name == 'blogger.displayTime') {
+                  comment.displayTime = entry.gd$extendedProperty[k].value;
+                }
+              }
+            }
+            comments.push(comment);
+          }
+        }
+        return comments;
+      };
+
+      var paginator = function(callback) {
+        if (hasMore()) {
+          var url = config.feed + '?alt=json&v=2&orderby=published&reverse=false&max-results=50';
+          if (cursor) {
+            url += '&published-min=' + new Date(cursor).toISOString();
+          }
+          window.bloggercomments = function(data) {
+            var parsed = parse(data);
+            cursor = parsed.length < 50 ? null
+                : parseInt(parsed[parsed.length - 1].timestamp) + 1
+            callback(parsed);
+            window.bloggercomments = null;
+          }
+          url += '&callback=bloggercomments';
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.src = url;
+          document.getElementsByTagName('head')[0].appendChild(script);
+        }
+      };
+      var hasMore = function() {
+        return !!cursor;
+      };
+      var getMeta = function(key, comment) {
+        if ('iswriter' == key) {
+          var matches = !!comment.author
+              && comment.author.name == config.authorName
+              && comment.author.profileUrl == config.authorUrl;
+          return matches ? 'true' : '';
+        } else if ('deletelink' == key) {
+          return config.baseUri + '/delete-comment.g?blogID='
+               + config.blogId + '&postID=' + comment.id;
+        } else if ('deleteclass' == key) {
+          return comment.deleteclass;
+        }
+        return '';
+      };
+
+      var replybox = null;
+      var replyUrlParts = null;
+      var replyParent = undefined;
+
+      var onReply = function(commentId, domId) {
+        if (replybox == null) {
+          // lazily cache replybox, and adjust to suit this style:
+          replybox = document.getElementById('comment-editor');
+          if (replybox != null) {
+            replybox.height = '250px';
+            replybox.style.display = 'block';
+            replyUrlParts = replybox.src.split('#');
+          }
+        }
+        if (replybox && (commentId !== replyParent)) {
+          replybox.src = '';
+          document.getElementById(domId).insertBefore(replybox, null);
+          replybox.src = replyUrlParts[0]
+              + (commentId ? '&parentID=' + commentId : '')
+              + '#' + replyUrlParts[1];
+          replyParent = commentId;
+        }
+      };
+
+      var hash = (window.location.hash || '#').substring(1);
+      var startThread, targetComment;
+      if (/^comment-form_/.test(hash)) {
+        startThread = hash.substring('comment-form_'.length);
+      } else if (/^c[0-9]+$/.test(hash)) {
+        targetComment = hash.substring(1);
+      }
+
+      // Configure commenting API:
+      var configJso = {
+        'maxDepth': config.maxThreadDepth
+      };
+      var provider = {
+        'id': config.postId,
+        'data': items,
+        'loadNext': paginator,
+        'hasMore': hasMore,
+        'getMeta': getMeta,
+        'onReply': onReply,
+        'rendered': true,
+        'initComment': targetComment,
+        'initReplyThread': startThread,
+        'config': configJso,
+        'messages': msgs
+      };
+
+      var render = function() {
+        if (window.goog && window.goog.comments) {
+          var holder = document.getElementById('comment-holder');
+          window.goog.comments.render(holder, provider);
+        }
+      };
+
+      // render now, or queue to render when library loads:
+      if (window.goog && window.goog.comments) {
+        render();
+      } else {
+        window.goog = window.goog || {};
+        window.goog.comments = window.goog.comments || {};
+        window.goog.comments.loadQueue = window.goog.comments.loadQueue || [];
+        window.goog.comments.loadQueue.push(render);
+      }
+    })();
+// ]]>
+  </script>
+<div id='comment-holder'>
+<div class="comment-thread toplevel-thread"><ol id="top-ra"><li class="comment" id="c3475836174620379868"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040029dcf.html?showComment=1482392559102#c3475836174620379868">21. Dezember 2016 um 23:42</a></span></div><p class="comment-content">go go go go go ...<br><br>https://www.lotro.com/en/game/articles/standing-stone-games-transition-faq</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="3475836174620379868">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=3475836174620379868">Löschen</a></span></span></div><div class="comment-replies"><div id="c3475836174620379868-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c3475836174620379868-ra" class="thread-chrome thread-expanded"><div></div><div id="c3475836174620379868-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3475836174620379868">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c3475836174620379868-ce"></div></li><li class="comment" id="c6637371579157369809"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040028edd.html?showComment=1484054723451#c6637371579157369809">10. Januar 2017 um 05:25</a></span></div><p class="comment-content">Lotro will die, I hope you sucess soon</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="6637371579157369809">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=6637371579157369809">Löschen</a></span></span></div><div class="comment-replies"><div id="c6637371579157369809-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c6637371579157369809-ra" class="thread-chrome thread-expanded"><div></div><div id="c6637371579157369809-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6637371579157369809">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c6637371579157369809-ce"></div></li><li class="comment" id="c1608821437467103921"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b00400220e0.html?showComment=1486366969410#c1608821437467103921">5. Februar 2017 um 23:42</a></span></div><p class="comment-content">bwg, are you still in progress on that?</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="1608821437467103921">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=1608821437467103921">Löschen</a></span></span></div><div class="comment-replies"><div id="c1608821437467103921-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c1608821437467103921-ra" class="thread-chrome thread-expanded"><div></div><div id="c1608821437467103921-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="1608821437467103921">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c1608821437467103921-ce"></div></li><li class="comment" id="c7713938165895960502"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040021311.html?showComment=1487143944623#c7713938165895960502">14. Februar 2017 um 23:32</a></span></div><p class="comment-content">Seems not ...</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="7713938165895960502">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=7713938165895960502">Löschen</a></span></span></div><div class="comment-replies"><div id="c7713938165895960502-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c7713938165895960502-ra" class="thread-chrome thread-expanded"><div></div><div id="c7713938165895960502-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="7713938165895960502">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c7713938165895960502-ce"></div></li><li class="comment" id="c1948727968899812858"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040021d26.html?showComment=1496174464546#c1948727968899812858">30. Mai 2017 um 13:01</a></span></div><p class="comment-content">How connect to test server, where are changes Ip in to client?</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="1948727968899812858">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=1948727968899812858">Löschen</a></span></span></div><div class="comment-replies"><div id="c1948727968899812858-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c1948727968899812858-ra" class="thread-chrome thread-expanded"><div></div><div id="c1948727968899812858-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="1948727968899812858">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c1948727968899812858-ce"></div></li><li class="comment" id="c3270877151909592476"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040028d22.html?showComment=1496994879760#c3270877151909592476">9. Juni 2017 um 00:54</a></span></div><p class="comment-content">Move along, nothing to see here anymore, the object of interest is obviously dead already.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="3270877151909592476">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=3270877151909592476">Löschen</a></span></span></div><div class="comment-replies"><div id="c3270877151909592476-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c3270877151909592476-ra" class="thread-chrome thread-expanded"><div></div><div id="c3270877151909592476-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3270877151909592476">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c3270877151909592476-ce"></div></li><li class="comment" id="c5640752613588176787"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040025232.html?showComment=1515072602299#c5640752613588176787">4. Januar 2018 um 05:30</a></span></div><p class="comment-content">Did anyone ever stumble upon just the empty server? Or come even close to make it himself? Only thing id use that for is to explore outside the map a bit, to places that are now closed off for good</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="5640752613588176787">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=5640752613588176787">Löschen</a></span></span></div><div class="comment-replies"><div id="c5640752613588176787-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c5640752613588176787-ra" class="thread-chrome thread-expanded"><div></div><div id="c5640752613588176787-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="5640752613588176787">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c5640752613588176787-ce"></div></li><li class="comment" id="c6560836600821904540"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b00400229bf.html?showComment=1515680171579#c6560836600821904540">11. Januar 2018 um 06:16</a></span></div><p class="comment-content">I&#39;m able to run around in the whole world (regions 1 to 4), change weather, spawn mobs and props, play animations and sounds, change health/mana/fear bars, change skillpoints, create quests, etc etc. I&#39;m not able to implement real gamelogic, simply because thats way too much work for a one man show.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="6560836600821904540">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=6560836600821904540">Löschen</a></span></span></div><div class="comment-replies"><div id="c6560836600821904540-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c6560836600821904540-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c3006836101870497708"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040023221.html?showComment=1516128015404#c3006836101870497708">16. Januar 2018 um 10:40</a></span></div><p class="comment-content">Can i reach you on some mail please? Would like to ask you how the hell can you do that what you said up there :)</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=3006836101870497708">Löschen</a></span></span></div><div class="comment-replies"><div id="c3006836101870497708-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c3006836101870497708-ra" class="thread-chrome thread-expanded"><div></div><div id="c3006836101870497708-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3006836101870497708">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c3006836101870497708-ce"></div></li><li class="comment" id="c6216945417507433946"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002e30e.html?showComment=1516179185900#c6216945417507433946">17. Januar 2018 um 00:53</a></span></div><p class="comment-content">I&#39;m not OP, but..<br>The things that were described here can be done by emulating the official game servers. As far as basic things like logging in, and walking around.. You&#39;ll have a fair deal of starting work ahead of you. With dedication and understanding for network programming, it can be done.<br><br>I&#39;m guessing by the OP, this is xbadcode, or someone like him. So I doubt he&#39;ll be sharing his code with you (because he shouldn&#39;t have to).<br><br>Instead of telling you to bother him about it, I&#39;ll describe the task ahead.<br><br>Basics:<br>- Create or obtain tools to log network data<br>- Create tools to parse and view the captured network data<br><br>This section is rather simple. Lots of time could be saved by using existing software like Wireshark. I&#39;ve personally taken the rout of setting up a proxy, and logging the data that way, but any implementation will work.<br>The more important part of this is being able to view and analyze the data captured. It&#39;s the part that will determine what can be learned.<br><br>Some info about capturing data for LOTRO:<br>-Compression<br>The game uses compression during network communications. The data you capture (save the first three packets send/revc with a given server) will be compressed. Without decompressing the data properly, it will not yield any information.<br><br>-Encryption (signature)<br>There is also a signed hash in the packet headers, so to replicate the network communication, or modify it as it&#39;s happening, you&#39;d need to figure this out. This step however, can be skipped to start, and technically never implemented if the developer of an emulator desired.<br><br>After you&#39;ve worked out the compression (it&#39;s been done, and posted on the gitlab related to this blog), you should be able to start taking apart the network protocol.<br><br>Ahead you&#39;ll have to figure out the basic packet structure (headers, subheaders), and core UDP communication features. This may provide a challange, especially if this is your first of either network programming projects, or reverse engineering projects.<br><br>If after reading this, you are still interested.. Feel free to contact me (again, not the original poster), and I&#39;d be happy to guide you in the right direction. For the sake of time and space, I won&#39;t go any further into explanation for this post.<br><br>Contact:<br>IRC: irc.efnet.net - #lotroemu (not my IRC, but we can meet there)<br>Email: cydrith@gmail.com<br><br>To the OP: If you&#39;re at all still interested in doing research for this game, do get in touch. It&#39;s always great to have capable people around, who share similar interests/goals.<br></p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=6216945417507433946">Löschen</a></span></span></div><div class="comment-replies"><div id="c6216945417507433946-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c6216945417507433946-ra" class="thread-chrome thread-expanded"><div></div><div id="c6216945417507433946-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6216945417507433946">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c6216945417507433946-ce"></div></li></div><div id="c6560836600821904540-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6560836600821904540">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c6560836600821904540-ce"></div></li><li class="comment" id="c8502785923914222804"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/16731720006423175969" rel="nofollow">Cydrith</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002446f.html?showComment=1515753186465#c8502785923914222804">12. Januar 2018 um 02:33</a></span></div><p class="comment-content">Dieser Kommentar wurde vom Autor entfernt.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="8502785923914222804">Antworten</a><span class="item-control blog-admin blog-admin "><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=8502785923914222804">Löschen</a></span></span></div><div class="comment-replies"><div id="c8502785923914222804-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c8502785923914222804-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c6437900415910325948"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040027ff4.html?showComment=1518181466589#c6437900415910325948">9. Februar 2018 um 05:04</a></span></div><p class="comment-content">It was fun to code, it was real fun to run around in the world. The last fun was to set rainy weather and have animations and sounds played, have Barliman Butterbur placed at Bilbos doorstep giving you a custom created quest to find his lost &quot;The one and only Butterbeer&quot; ... but that was it. <br><br>Aside from the legal issues (LOTRO is still an active running game, compared to e.g. AC) i lost interest, as my lowlevel code is &quot;finished&quot; and would allow to create a playable system, but that&#39;s &quot;just&quot; boring scripting stuff. <br><br></p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=6437900415910325948">Löschen</a></span></span></div><div class="comment-replies"><div id="c6437900415910325948-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c6437900415910325948-ra" class="thread-chrome thread-expanded"><div></div><div id="c6437900415910325948-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6437900415910325948">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c6437900415910325948-ce"></div></li><li class="comment" id="c3528192091705668562"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002aaff.html?showComment=1518195839275#c3528192091705668562">9. Februar 2018 um 09:03</a></span></div><p class="comment-content">Would you consider at least to give the others, who may still work on and off on this, directions and guidelines in which way to go next, so they can maybe continue where you left.<br>I am no coder, and my only desire is to visit some spots on map which are now closed off for good, and i missed the opportunity before when they were open.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=3528192091705668562">Löschen</a></span></span></div><div class="comment-replies"><div id="c3528192091705668562-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c3528192091705668562-ra" class="thread-chrome thread-expanded"><div></div><div id="c3528192091705668562-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3528192091705668562">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c3528192091705668562-ce"></div></li><li class="comment" id="c4024856127631322418"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/16731720006423175969" rel="nofollow">Cydrith</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040020658.html?showComment=1518242139936#c4024856127631322418">9. Februar 2018 um 21:55</a></span></div><p class="comment-content">Dieser Kommentar wurde vom Autor entfernt.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin "><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=4024856127631322418">Löschen</a></span></span></div><div class="comment-replies"><div id="c4024856127631322418-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c4024856127631322418-ra" class="thread-chrome thread-expanded"><div></div><div id="c4024856127631322418-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="4024856127631322418">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c4024856127631322418-ce"></div></li><li class="comment" id="c3832939854539554681"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b00400261d4.html?showComment=1519131779416#c3832939854539554681">20. Februar 2018 um 05:02</a></span></div><p class="comment-content">Looking at ACE i see alot of similarity to my LOTRO code, except my one is way more chaotic - erm - experimental :)<br><br>Base networking is the same (including the checksum magic), but highlevel messaging via the fragments is way more complex in LOTRO compared to ACE. My packet debugger spits out a bunch of new and unknown message codes every time they update the client (and looking at the ones i could already identify i sometimes feel they lost track over their own structures as well).<br><br>So, on the long term, ACE already offers base code for LOTRO too (which isn&#39;t that much of a surprise), and the command messaging stuff on top is a buttload to reverse. Seeing the actual state of ACE at that level, i would say stick to it instead of digging into the next pool of mud. <br><br>Maybe one day i will fixate my code to an older client version to eliminate the problem of running into unknown stuff each and every time they update the client, since this is *very* annoying (up to breaking previous working structures because they changed the order for example).<br><br><br></p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=3832939854539554681">Löschen</a></span></span></div><div class="comment-replies"><div id="c3832939854539554681-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c3832939854539554681-ra" class="thread-chrome thread-expanded"><div></div><div id="c3832939854539554681-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3832939854539554681">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c3832939854539554681-ce"></div></li><li class="comment" id="c3742939856976280872"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/16731720006423175969" rel="nofollow">Cydrith</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002e715.html?showComment=1519160491763#c3742939856976280872">20. Februar 2018 um 13:01</a></span></div><p class="comment-content">Dieser Kommentar wurde vom Autor entfernt.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin "><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=3742939856976280872">Löschen</a></span></span></div><div class="comment-replies"><div id="c3742939856976280872-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c3742939856976280872-ra" class="thread-chrome thread-expanded"><div></div><div id="c3742939856976280872-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3742939856976280872">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c3742939856976280872-ce"></div></li></div><div id="c8502785923914222804-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="8502785923914222804">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c8502785923914222804-ce"></div></li><li class="comment" id="c5242438890878631870"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/16731720006423175969" rel="nofollow">Cydrith</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002bf9e.html?showComment=1515753201305#c5242438890878631870">12. Januar 2018 um 02:33</a></span></div><p class="comment-content">Dieser Kommentar wurde vom Autor entfernt.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="5242438890878631870">Antworten</a><span class="item-control blog-admin blog-admin "><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=5242438890878631870">Löschen</a></span></span></div><div class="comment-replies"><div id="c5242438890878631870-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c5242438890878631870-ra" class="thread-chrome thread-expanded"><div></div><div id="c5242438890878631870-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="5242438890878631870">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c5242438890878631870-ce"></div></li><li class="comment" id="c5478948619836909940"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002215a.html?showComment=1523620223553#c5478948619836909940">13. April 2018 um 04:50</a></span></div><p class="comment-content">Did anyone had a closer look at lotros weenie code engine so far?</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="5478948619836909940">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=5478948619836909940">Löschen</a></span></span></div><div class="comment-replies"><div id="c5478948619836909940-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c5478948619836909940-ra" class="thread-chrome thread-expanded"><div></div><div id="c5478948619836909940-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="5478948619836909940">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c5478948619836909940-ce"></div></li><li class="comment" id="c6404226862649464019"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/01133273044420155876" rel="nofollow">TheMadFitz</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002b898.html?showComment=1550664323700#c6404226862649464019">20. Februar 2019 um 04:05</a></span></div><p class="comment-content">Not yet, I&#39;ve been trying to marry up what ACE have done and their tooling to use it with the Lotro client - there seems to be a lot of similarities between the two (code, DAT Files etc...) - I&#39;ve gotten as far as writing a really basic Python Server that gets me as far as Character Selection but it loops when I try to enter the game world.  I&#39;ll post here if/when I get further...<br></p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="6404226862649464019">Antworten</a><span class="item-control blog-admin blog-admin pid-753244263"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=6404226862649464019">Löschen</a></span></span></div><div class="comment-replies"><div id="c6404226862649464019-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c6404226862649464019-ra" class="thread-chrome thread-expanded"><div></div><div id="c6404226862649464019-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6404226862649464019">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c6404226862649464019-ce"></div></li><li class="comment" id="c6234846230373060376"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002194d.html?showComment=1550757443715#c6234846230373060376">21. Februar 2019 um 05:57</a></span></div><p class="comment-content">Ok, but serving character selection and gameplay isn&#39;t an issue, what i was asking for is the &quot;weenie code&quot; engine =&gt; that&#39;s the highlevel game design engine, responsible for scripting all the things that will enliven the world, e.g. quests.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="6234846230373060376">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=6234846230373060376">Löschen</a></span></span></div><div class="comment-replies"><div id="c6234846230373060376-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c6234846230373060376-ra" class="thread-chrome thread-expanded"><div></div><div id="c6234846230373060376-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6234846230373060376">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c6234846230373060376-ce"></div></li><li class="comment" id="c6698111364268733067"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002122d.html?showComment=1551451318122#c6698111364268733067">1. März 2019 um 06:41</a></span></div><p class="comment-content">Do they look like this:<br>ID_CraftProfession_Master<br>ID_CraftProfession_MasteryProgress<br>ID_CraftProfession_ProficiencyProgress<br>ID_CraftProfession_Proficient<br>ID_CraftProfession_RecipeName<br>ID_CraftProfession_RecipeName_NoCount<br>ID_CraftProfession_TierEntry<br>ID_CraftProfession_TierEntryNoMastery<br>ID_CraftRecipe_CritBonus<br>?</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="6698111364268733067">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=6698111364268733067">Löschen</a></span></span></div><div class="comment-replies"><div id="c6698111364268733067-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c6698111364268733067-ra" class="thread-chrome thread-expanded"><div></div><div id="c6698111364268733067-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6698111364268733067">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c6698111364268733067-ce"></div></li><li class="comment" id="c2544966748702181714"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/09768272413287721318" rel="nofollow">ENDrain</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002443d.html?showComment=1557672195230#c2544966748702181714">12. Mai 2019 um 07:43</a></span></div><p class="comment-content">Can somebody please share working code for a basic &quot;run-around-the-world&quot; home server with the world?</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="2544966748702181714">Antworten</a><span class="item-control blog-admin blog-admin pid-77307344"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=2544966748702181714">Löschen</a></span></span></div><div class="comment-replies"><div id="c2544966748702181714-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c2544966748702181714-ra" class="thread-chrome thread-expanded"><div></div><div id="c2544966748702181714-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="2544966748702181714">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c2544966748702181714-ce"></div></li><li class="comment" id="c324504873130948337"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040026e43.html?showComment=1559363940263#c324504873130948337">31. Mai 2019 um 21:39</a></span></div><p class="comment-content">I haven&#39;t seen one to date.  I&#39;m still plugging away at this in the background.  As eluded to though the protocol has change significantly from when the decryption program they initially had.<br><br>That being said, I&#39;ve managed to find the RSA private key in the client and I&#39;m trying to understand the helper method and other bits and pieces in order to make the necessary modifications.  I&#39;m also trowling through the ACE code looking at how they&#39;re working through it.  There are a lot of similarities in the executables when you disassemble the ACClient and LotroClient.  Weenie codes are key, but I think parsing the DAT files will provide a lot of understanding of how the client generates the traffic.  Most of the logic exists in these files (a lot of the weenies such as spell tables, weapons etc.. are derived from the files based on the parsed data by their server).  I&#39;m also looking at the LUA scripting interface and wonder whether the IDs that it spits out are actually the Weenie codes associated with the items.  Replaying a packet capture will get you all the way into the world (I&#39;m doing this with a Python Script and CSV files of the packet capture) but its academic if we can&#39;t decrypt them - I can see which packets trigger which but without understanding how to generate them and what values to use I&#39;m at a bit stumped.  Still learning programming probably not helping...<br><br>Anyway, happy to throw what I&#39;ve got into a new GitHub if anyones interesting in continuing to look at it.<br></p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="324504873130948337">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=324504873130948337">Löschen</a></span></span></div><div class="comment-replies"><div id="c324504873130948337-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c324504873130948337-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c7088171278248175216"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002c231.html?showComment=1565596858433#c7088171278248175216">12. August 2019 um 01:00</a></span></div><p class="comment-content">if you&#39;re still willing to upload this to github id love to take a look.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=7088171278248175216">Löschen</a></span></span></div><div class="comment-replies"><div id="c7088171278248175216-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c7088171278248175216-ra" class="thread-chrome thread-expanded"><div></div><div id="c7088171278248175216-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="7088171278248175216">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c7088171278248175216-ce"></div></li><li class="comment" id="c887217566558150376"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/09768272413287721318" rel="nofollow">ENDrain</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002d5aa.html?showComment=1565629953344#c887217566558150376">12. August 2019 um 10:12</a></span></div><p class="comment-content">Do share please!</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-77307344"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=887217566558150376">Löschen</a></span></span></div><div class="comment-replies"><div id="c887217566558150376-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c887217566558150376-ra" class="thread-chrome thread-expanded"><div></div><div id="c887217566558150376-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="887217566558150376">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c887217566558150376-ce"></div></li></div><div id="c324504873130948337-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="324504873130948337">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c324504873130948337-ce"></div></li><li class="comment" id="c7644853656778575511"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002434c.html?showComment=1566272037701#c7644853656778575511">19. August 2019 um 20:33</a></span></div><p class="comment-content">Happy to upload it and will do shortly.  I&#39;ll post back here with the URL.  For the Tammo, Bwyg and xba - did you guys come across any of the following sequences in the decrypted packet streams?<br>connection_good:   11000000<br>connection_uncertain: 12000000<br>connection_disconnected:14000000<br><br><br>These are all present (as well as heaps of others in the client_gamelogic.dat client.<br><br>The current auto decryption tools don&#39;t work on the current structures but if you guys have any decrypted packet streams, i&#39;d love to analyse them against what i&#39;m finding in the DAT files.<br><br>Cheers,<br>H<br></p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="7644853656778575511">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=7644853656778575511">Löschen</a></span></span></div><div class="comment-replies"><div id="c7644853656778575511-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c7644853656778575511-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c7335210988394495552"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b00400248c1.html?showComment=1572126888286#c7335210988394495552">26. Oktober 2019 um 14:54</a></span></div><p class="comment-content">At what server do you play. Would love to ask you some questions, if you are willing to share the name?</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=7335210988394495552">Löschen</a></span></span></div><div class="comment-replies"><div id="c7335210988394495552-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c7335210988394495552-ra" class="thread-chrome thread-expanded"><div></div><div id="c7335210988394495552-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="7335210988394495552">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c7335210988394495552-ce"></div></li></div><div id="c7644853656778575511-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="7644853656778575511">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c7644853656778575511-ce"></div></li><li class="comment" id="c5700565914509939409"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040028422.html?showComment=1573642741637#c5700565914509939409">13. November 2019 um 02:59</a></span></div><p class="comment-content">putting my char name here would be a bad idea... but these guys appear to be looking into it... think they&#39;re able to get decrypted packets... and pull the weenie codes out.<br><br>this is the thread: https://guidedhacking.com/threads/lotro-group-project.12696/page-4#post-83317<br></p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="5700565914509939409">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=5700565914509939409">Löschen</a></span></span></div><div class="comment-replies"><div id="c5700565914509939409-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c5700565914509939409-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c5700996545132019746"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002c5a0.html?showComment=1573750092020#c5700996545132019746">14. November 2019 um 08:48</a></span></div><p class="comment-content">I was thinking about server name, where you play, not char name ofc. I would find you there no prob.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=5700996545132019746">Löschen</a></span></span></div><div class="comment-replies"><div id="c5700996545132019746-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c5700996545132019746-ra" class="thread-chrome thread-expanded"><div></div><div id="c5700996545132019746-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="5700996545132019746">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c5700996545132019746-ce"></div></li></div><div id="c5700565914509939409-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="5700565914509939409">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c5700565914509939409-ce"></div></li><li class="comment" id="c8569155367766645421"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002bea8.html?showComment=1574342167136#c8569155367766645421">21. November 2019 um 05:16</a></span></div><p class="comment-content">I jump on and off a few different ones... Crickhollow lately.  Based on the thread on GH I&#39;ve &quot;almost&quot; got a working decrypted packet dumper. Works for the received packets.  Plenty of info in the day files as well. There&#39;s a good tool that dumps the properties out of the client dat files (IDs, types, bit fields, enums etc...) Hoping to get round to deciphering these against the packets data.  Basically I&#39;m back to where these guys were before it all went quiet...</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="8569155367766645421">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=8569155367766645421">Löschen</a></span></span></div><div class="comment-replies"><div id="c8569155367766645421-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c8569155367766645421-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c9040901940309191352"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040023e27.html?showComment=1578237720491#c9040901940309191352">5. Januar 2020 um 07:22</a></span></div><p class="comment-content">Can you log into the game (run around), or are you still long way from that?<br>For example, this one guy can explore far away from usual borders of map<br>https://old.reddit.com/user/MiniExpBounder<br>If you ever finisnh, would you be able to do it aswell?</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=9040901940309191352">Löschen</a></span></span></div><div class="comment-replies"><div id="c9040901940309191352-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c9040901940309191352-ra" class="thread-chrome thread-expanded"><div></div><div id="c9040901940309191352-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="9040901940309191352">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c9040901940309191352-ce"></div></li></div><div id="c8569155367766645421-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="8569155367766645421">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c8569155367766645421-ce"></div></li><li class="comment" id="c2405320752758393299"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040023207.html?showComment=1578735050551#c2405320752758393299">11. Januar 2020 um 01:30</a></span></div><p class="comment-content">Theoretically, yes... I&#39;ve got the server movement packets being dumped and I&#39;m pretty close to getting the client packets dumped properly. The client seems ok with unencrypted server packets, just need to understand the whole conversation between the client and server regarding movement. Once this is sorted, you can theoretically run wherever you want by having a local server send movement ack packets. It&#39;s tedious and I&#39;m not a programmer, sort of learning as I go...</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="2405320752758393299">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=2405320752758393299">Löschen</a></span></span></div><div class="comment-replies"><div id="c2405320752758393299-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c2405320752758393299-ra" class="thread-chrome thread-expanded"><div></div><div id="c2405320752758393299-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="2405320752758393299">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c2405320752758393299-ce"></div></li><li class="comment" id="c2239337272098346834"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002a590.html?showComment=1578735288234#c2239337272098346834">11. Januar 2020 um 01:34</a></span></div><p class="comment-content">And yes I can get into the world using patched packets... Can&#39;t move yet (kidding the client side of the conversation). Server side sends [header] + 0x4003 then 0x030004 such when I&#39;m watching in memory has an associated client packet (same root codes) preceding and following. Shod know more later tonight.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="2239337272098346834">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=2239337272098346834">Löschen</a></span></span></div><div class="comment-replies"><div id="c2239337272098346834-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c2239337272098346834-ra" class="thread-chrome thread-expanded"><div></div><div id="c2239337272098346834-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="2239337272098346834">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c2239337272098346834-ce"></div></li><li class="comment" id="c2227711672269226632"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040022445.html?showComment=1578736018244#c2227711672269226632">11. Januar 2020 um 01:46</a></span></div><p class="comment-content">Hi, bystander here. Is there a way to get this conversation unto a Discord or so? Creating an emulator is not illegal, since this would be your IP. It would be just nice to have a real place to go l, instead of this ghost town comment section :D<br><br>My personal motivation is, that LOTRO will shut down one day. When SWTOR was developed, SWG was shut down eventually. And even if SSG says, that they will continue, we all know that sooner or later Amazon will win. </p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="2227711672269226632">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=2227711672269226632">Löschen</a></span></span></div><div class="comment-replies"><div id="c2227711672269226632-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c2227711672269226632-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c6290173311885458288"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/09768272413287721318" rel="nofollow">ENDrain</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040028559.html?showComment=1578743713536#c6290173311885458288">11. Januar 2020 um 03:55</a></span></div><p class="comment-content">Dieser Kommentar wurde vom Autor entfernt.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin "><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=6290173311885458288">Löschen</a></span></span></div><div class="comment-replies"><div id="c6290173311885458288-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c6290173311885458288-ra" class="thread-chrome thread-expanded"><div></div><div id="c6290173311885458288-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6290173311885458288">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c6290173311885458288-ce"></div></li><li class="comment" id="c3518517510602411344"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/09768272413287721318" rel="nofollow">ENDrain</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002b0e2.html?showComment=1578743758014#c3518517510602411344">11. Januar 2020 um 03:55</a></span></div><p class="comment-content">Everything&#39;s illegal that copyright holders decide to be, look no further than Nintendo and EA. Given MMO history and current state of VG industry I think we can say that making an emulator is illegal alright.<br><br>I&#39;m creating a Discord server now, but even there we should better keep a low profile. I&#39;ll be giving one-time invites directly in hands, message me at ENDrain#0997 to get one.</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-77307344"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=3518517510602411344">Löschen</a></span></span></div><div class="comment-replies"><div id="c3518517510602411344-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c3518517510602411344-ra" class="thread-chrome thread-expanded"><div></div><div id="c3518517510602411344-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3518517510602411344">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c3518517510602411344-ce"></div></li></div><div id="c2227711672269226632-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="2227711672269226632">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c2227711672269226632-ce"></div></li><li class="comment" id="c1886435786059520795"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/09768272413287721318" rel="nofollow">ENDrain</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040026140.html?showComment=1578743855445#c1886435786059520795">11. Januar 2020 um 03:57</a></span></div><p class="comment-content">Sadly I don&#39;t have any time to jump into coding myself, but I&#39;m monitoring this conversation and releived to know there&#39;s still some progress. Keep up the good work, my haert is with you.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="1886435786059520795">Antworten</a><span class="item-control blog-admin blog-admin pid-77307344"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=1886435786059520795">Löschen</a></span></span></div><div class="comment-replies"><div id="c1886435786059520795-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c1886435786059520795-ra" class="thread-chrome thread-expanded"><div></div><div id="c1886435786059520795-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="1886435786059520795">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c1886435786059520795-ce"></div></li><li class="comment" id="c4654787125188878348"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002ac86.html?showComment=1579119348399#c4654787125188878348">15. Januar 2020 um 12:15</a></span></div><p class="comment-content">Hi END, reached out via discord as I&#39;m keen to share I&#39;ve done so far. I&#39;ll get it on gitlab shortly as well. Think I&#39;ll fork the current repo which should make it easy enough to find.<br>H</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="4654787125188878348">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=4654787125188878348">Löschen</a></span></span></div><div class="comment-replies"><div id="c4654787125188878348-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c4654787125188878348-ra" class="thread-chrome thread-expanded"><div></div><div id="c4654787125188878348-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="4654787125188878348">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c4654787125188878348-ce"></div></li><li class="comment" id="c412293534333865888"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002b74f.html?showComment=1579375762434#c412293534333865888">18. Januar 2020 um 11:29</a></span></div><p class="comment-content">Bystander here again. I&#39;ve sent out a request, name starts with O</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="412293534333865888">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=412293534333865888">Löschen</a></span></span></div><div class="comment-replies"><div id="c412293534333865888-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c412293534333865888-ra" class="thread-chrome thread-expanded"><div></div><div id="c412293534333865888-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="412293534333865888">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c412293534333865888-ce"></div></li><li class="comment" id="c5966171658418991404"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonym</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040020641.html?showComment=1579397172373#c5966171658418991404">18. Januar 2020 um 17:26</a></span></div><p class="comment-content">And we&#39;re in - i&#39;ve put the link to the code and a compiled copy of the logger dll in the discord channel.  Will put a video of it in action in there as well.<br></p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="5966171658418991404">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=5966171658418991404">Löschen</a></span></span></div><div class="comment-replies"><div id="c5966171658418991404-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c5966171658418991404-ra" class="thread-chrome thread-expanded"><div></div><div id="c5966171658418991404-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="5966171658418991404">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c5966171658418991404-ce"></div></li><li class="comment" id="c4039584867070164588"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/16289056957456303397" rel="nofollow">asplex</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002adaa.html?showComment=1596040442058#c4039584867070164588">29. Juli 2020 um 09:34</a></span></div><p class="comment-content">Hi! Could you link the discord channel?</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="4039584867070164588">Antworten</a><span class="item-control blog-admin blog-admin pid-124497256"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=4039584867070164588">Löschen</a></span></span></div><div class="comment-replies"><div id="c4039584867070164588-rt" class="comment-thread inline-thread"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c4039584867070164588-ra" class="thread-chrome thread-expanded"><div><li class="comment" id="c8443223965196600895"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/09768272413287721318" rel="nofollow">ENDrain</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040027c67.html?showComment=1596064618242#c8443223965196600895">29. Juli 2020 um 16:16</a></span></div><p class="comment-content">Message me at ENDrain#0997</p><span class="comment-actions secondary-text"><span class="item-control blog-admin blog-admin pid-77307344"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=8443223965196600895">Löschen</a></span></span></div><div class="comment-replies"><div id="c8443223965196600895-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c8443223965196600895-ra" class="thread-chrome thread-expanded"><div></div><div id="c8443223965196600895-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="8443223965196600895">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c8443223965196600895-ce"></div></li></div><div id="c4039584867070164588-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="4039584867070164588">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c4039584867070164588-ce"></div></li><li class="comment" id="c6632805375221056359"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002d458.html?showComment=1597518999027#c6632805375221056359">15. August 2020 um 12:16</a></span></div><p class="comment-content">Hi all,<br><br>long time no talk ... how the progress on all this ?</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="6632805375221056359">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=6632805375221056359">Löschen</a></span></span></div><div class="comment-replies"><div id="c6632805375221056359-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c6632805375221056359-ra" class="thread-chrome thread-expanded"><div></div><div id="c6632805375221056359-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6632805375221056359">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c6632805375221056359-ce"></div></li><li class="comment" id="c5854981063520558999"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/01133273044420155876" rel="nofollow">TheMadFitz</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002bcf1.html?showComment=1597664159889#c5854981063520558999">17. August 2020 um 04:35</a></span></div><p class="comment-content">Quite a bit actually... would love to ask you a couple of questions though Re: your findings and to compare notes on what we&#39;ve found.  I&#39;m also chasing some vintage packet captures of the pre-Rohan changes (as far back as Moria would be awesome).<br><br>drop me a line at fitzyhayden@gmail.com.<br><br>Cheers,<br>H</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="5854981063520558999">Antworten</a><span class="item-control blog-admin blog-admin pid-753244263"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=5854981063520558999">Löschen</a></span></span></div><div class="comment-replies"><div id="c5854981063520558999-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c5854981063520558999-ra" class="thread-chrome thread-expanded"><div></div><div id="c5854981063520558999-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="5854981063520558999">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c5854981063520558999-ce"></div></li><li class="comment" id="c8048015182429124596"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/14009306267003288813" rel="nofollow">soa champion</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040024fd6.html?showComment=1598015261306#c8048015182429124596">21. August 2020 um 06:07</a></span></div><p class="comment-content">Good to see some people are still coming back to this blog :) for those interested, let me summarize where the lotro pserver scene is at the moment (to the best of my knowledge). There are at least two groups able to enter the world with a custom server, move around, modify basic parameters like stats or quests and spawn NPCs/monsters. Where these two groups diverge is their focus:<br><br>One group is working with the live client, capturing packets and trying to make sense of them. They have a lot of information at their disposal and an on-demand reference frame but are somewhat lacking in active developers and most of their stuff is inherited from other devs and not written by them. <br>If you&#39;re interested in reverse engineering the live game, you should look up the discord higher up on this page.<br><br>The other group is focusing hard on getting a vanilla-SoA server up and running. Even though this is a more complex job without a reference retail server, they are arguably much further along than the first group. They have a much stronger understanding of the data that&#39;s available (lotro has A LOT of data on the client if you know how to use it), good grasp of the executable and a clear path to server implementation with only relatively few unknowns. Also more active developers but could always use more people interested in SoA - if you&#39;re one of them, drop a message to TheMadFitz above ;) </p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="8048015182429124596">Antworten</a><span class="item-control blog-admin blog-admin pid-1988392329"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=8048015182429124596">Löschen</a></span></span></div><div class="comment-replies"><div id="c8048015182429124596-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c8048015182429124596-ra" class="thread-chrome thread-expanded"><div></div><div id="c8048015182429124596-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="8048015182429124596">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c8048015182429124596-ce"></div></li><li class="comment" id="c6166675275518879240"><div class="avatar-image-container"><img src="../../../resources.blogblog.com/img/blank.gif" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user">xbadc0de</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002df24.html?showComment=1598029947161#c6166675275518879240">21. August 2020 um 10:12</a></span></div><p class="comment-content">That&#39;s really awesome to hear ... i recently managed to (partly) get the effect generators working, so actions like spells or melee attacks play the correct ones on usage. I even managed to activate all emotes, have all cosmetic pets and the complete list of mounts (everyhing selectable and working). And nearly all quick travel points are working using mithril coins, so one can quickly change to nearly any position in the world from within the travel map.<br><br><br>Depending on my time this weekend i will drop you an email to the above address, lets see if we may can arrange some chat or  whatever (i dont have discord installed yet).<br><br>Greetings,<br>xbadc0de<br></p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="6166675275518879240">Antworten</a><span class="item-control blog-admin blog-admin pid-380951758"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=6166675275518879240">Löschen</a></span></span></div><div class="comment-replies"><div id="c6166675275518879240-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c6166675275518879240-ra" class="thread-chrome thread-expanded"><div></div><div id="c6166675275518879240-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6166675275518879240">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c6166675275518879240-ce"></div></li><li class="comment" id="c2936779238516137985"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/01133273044420155876" rel="nofollow">TheMadFitz</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b004002d308.html?showComment=1598060652302#c2936779238516137985">21. August 2020 um 18:44</a></span></div><p class="comment-content">It has a web client as well which is handy :) look forward to chatting to you sometime in the near future.<br>Cheers,<br>H</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="2936779238516137985">Antworten</a><span class="item-control blog-admin blog-admin pid-753244263"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=2936779238516137985">Löschen</a></span></span></div><div class="comment-replies"><div id="c2936779238516137985-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c2936779238516137985-ra" class="thread-chrome thread-expanded"><div></div><div id="c2936779238516137985-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="2936779238516137985">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c2936779238516137985-ce"></div></li><li class="comment" id="c1932047757274083184"><div class="avatar-image-container"><img src="http://lh3.googleusercontent.com/zFdxGE77vvD2w5xHy6jkVuElKv-U9_9qLkRYK8OnbDeJPtjSZ82UPq5w6hJ-SA=s35" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/08035908567329170586" rel="nofollow">Unknown</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="howto-understand-0b000002-vs-0b0040026da7.html?showComment=1602189029666#c1932047757274083184">8. Oktober 2020 um 13:30</a></span></div><p class="comment-content">Hello this nerd Dread#8867 wants to talk to you guys about helping you with man power on this project. contact him on discord plz</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="1932047757274083184">Antworten</a><span class="item-control blog-admin blog-admin pid-910342265"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=5998090735925918818&amp;postID=1932047757274083184">Löschen</a></span></span></div><div class="comment-replies"><div id="c1932047757274083184-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Antworten</a></span></span><ol id="c1932047757274083184-ra" class="thread-chrome thread-expanded"><div></div><div id="c1932047757274083184-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="1932047757274083184">Antworten</a></div></ol></div></div><div class="comment-replybox-single" id="c1932047757274083184-ce"></div></li></ol><div id="top-continue" class="continue"><a class="comment-reply" target="_self">Kommentar hinzufügen</a></div><div class="comment-replybox-thread" id="top-ce"></div><div class="loadmore hidden" data-post-id="5443309192279437670"><a target="_self">Weitere laden...</a></div></div>
+</div>
+</div>
+<p class='comment-footer'>
+<div class='comment-form'>
+<a name='comment-form'></a>
+<p>
+</p>
+<a href='https://www.blogger.com/comment-iframe.g?blogID=5998090735925918818&amp;postID=5443309192279437670' id='comment-editor-src'></a>
+<iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' frameborder='0' height='410px' id='comment-editor' name='comment-editor' src='#' width='100%'></iframe>
+<script src='../../../www.blogger.com/static/v1/jsbin/1068921344-comment_from_post_iframe.js' type='text/javascript'></script>
+<script type='text/javascript'>
+      BLOG_CMT_createIframe('https://www.blogger.com/rpc_relay.html');
+    </script>
+</div>
+</p>
+<div id='backlinks-container'>
+<div id='Blog1_backlinks-container'>
+</div>
+</div>
+</div>
+</div>
+
+        </div></div>
+      
+</div>
+<div class='blog-pager' id='blog-pager'>
+<span id='blog-pager-older-link'>
+<a class='blog-pager-older-link' href='the-first-packet-sent-by-server-back-to.html' id='Blog1_blog-pager-older-link' title='Älterer Post'>Älterer Post</a>
+</span>
+<a class='home-link' href='../../index.html'>Startseite</a>
+</div>
+<div class='clear'></div>
+<div class='post-feeds'>
+<div class='feed-links'>
+Abonnieren
+<a class='feed-link' href='../../feeds/5443309192279437670/comments/default' target='_blank' type='application/atom+xml'>Kommentare zum Post (Atom)</a>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+<div class='column-left-outer'>
+<div class='column-left-inner'>
+<aside>
+</aside>
+</div>
+</div>
+<div class='column-right-outer'>
+<div class='column-right-inner'>
+<aside>
+<div class='sidebar section' id='sidebar-right-1'><div class='widget BlogArchive' data-version='1' id='BlogArchive2'>
+<h2>Blog-Archiv</h2>
+<div class='widget-content'>
+<div id='ArchiveList'>
+<div id='BlogArchive2_ArchiveList'>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>
+
+        &#9660;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../index.html'>
+2016
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>
+
+        &#9660;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='index.html'>
+November
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+<ul class='posts'>
+<li><a href='howto-understand-0b000002-vs-0b004002.html'>HowTo: Understand 0B000002 vs. 0B004002 packets</a></li>
+<li><a href='the-first-packet-sent-by-server-back-to.html'>HowTo: Read the first packet sent by the server</a></li>
+<li><a href='howto-read-first-packet-sent-by-client.html'>HowTo: Read the first packet sent by the client</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../10/index.html'>
+Oktober
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2015/index.html'>
+2015
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2015/04/index.html'>
+April
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2014/index.html'>
+2014
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2014/06/index.html'>
+Juni
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2013/index.html'>
+2013
+</a>
+<span class='post-count' dir='ltr'>(11)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2013/10/index.html'>
+Oktober
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2013/09/index.html'>
+September
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2013/03/index.html'>
+März
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2012/index.html'>
+2012
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2012/07/index.html'>
+Juli
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2012/03/index.html'>
+März
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2011/index.html'>
+2011
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2011/12/index.html'>
+Dezember
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2010/index.html'>
+2010
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2010/10/index.html'>
+Oktober
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2010/04/index.html'>
+April
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2010/01/index.html'>
+Januar
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/index.html'>
+2009
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/12/index.html'>
+Dezember
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/07/index.html'>
+Juli
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/02/index.html'>
+Februar
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='../../2009/01/index.html'>
+Januar
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=5998090735925918818&amp;widgetType=BlogArchive&amp;widgetId=BlogArchive2&amp;action=editWidget&amp;sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("BlogArchive2"));' rel='nofollow' target='configBlogArchive2' title='Bearbeiten'>
+<img alt='' height='18' src='../../../resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div></div>
+<table border='0' cellpadding='0' cellspacing='0' class='section-columns columns-2'>
+<tbody>
+<tr>
+<td class='first columns-cell'>
+<div class='sidebar no-items section' id='sidebar-right-2-1'></div>
+</td>
+<td class='columns-cell'>
+<div class='sidebar no-items section' id='sidebar-right-2-2'></div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class='sidebar no-items section' id='sidebar-right-3'></div>
+</aside>
+</div>
+</div>
+</div>
+<div style='clear: both'></div>
+<!-- columns -->
+</div>
+<!-- main -->
+</div>
+</div>
+<div class='main-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<footer>
+<div class='footer-outer'>
+<div class='footer-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left footer-fauxborder-left'>
+<div class='fauxborder-right footer-fauxborder-right'></div>
+<div class='region-inner footer-inner'>
+<div class='foot no-items section' id='footer-1'></div>
+<table border='0' cellpadding='0' cellspacing='0' class='section-columns columns-2'>
+<tbody>
+<tr>
+<td class='first columns-cell'>
+<div class='foot no-items section' id='footer-2-1'></div>
+</td>
+<td class='columns-cell'>
+<div class='foot no-items section' id='footer-2-2'></div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- outside of the include in order to lock Attribution widget -->
+<div class='foot section' id='footer-3' name='Footer'><div class='widget Attribution' data-version='1' id='Attribution1'>
+<div class='widget-content' style='text-align: center;'>
+Design "Einfach". Powered by <a href='https://www.blogger.com/' target='_blank'>Blogger</a>.
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=5998090735925918818&amp;widgetType=Attribution&amp;widgetId=Attribution1&amp;action=editWidget&amp;sectionId=footer-3' onclick='return _WidgetManager._PopupConfig(document.getElementById("Attribution1"));' rel='nofollow' target='configAttribution1' title='Bearbeiten'>
+<img alt='' height='18' src='../../../resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div></div>
+</div>
+</div>
+<div class='footer-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</footer>
+<!-- content -->
+</div>
+</div>
+<div class='content-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<script type='text/javascript'>
+    window.setTimeout(function() {
+        document.body.className = document.body.className.replace('loading', '');
+      }, 10);
+  </script>
+
+<script type="text/javascript" src="../../../www.blogger.com/static/v1/widgets/389203291-widgets.js"></script>
+<script type='text/javascript'>
+window['__wavt'] = 'AOuZoY6bbSLOHIL_kKPqzJY7kJ4p5zp5Eg:1602195004203';_WidgetManager._Init('//www.blogger.com/rearrange?blogID\x3d5998090735925918818','howto-understand-0b000002-vs-0b004002.html','5998090735925918818');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'blogId': '5998090735925918818', 'title': 'lotro revenge', 'url': 'http://bwgypyth.blogspot.com/2016/11/howto-understand-0b000002-vs-0b004002.html', 'canonicalUrl': 'http://bwgypyth.blogspot.com/2016/11/howto-understand-0b000002-vs-0b004002.html', 'homepageUrl': 'http://bwgypyth.blogspot.com/', 'searchUrl': 'http://bwgypyth.blogspot.com/search', 'canonicalHomepageUrl': 'http://bwgypyth.blogspot.com/', 'blogspotFaviconUrl': 'http://bwgypyth.blogspot.com/favicon.ico', 'bloggerUrl': 'https://www.blogger.com', 'hasCustomDomain': false, 'httpsEnabled': true, 'enabledCommentProfileImages': true, 'gPlusViewType': 'FILTERED_POSTMOD', 'adultContent': false, 'analyticsAccountNumber': '', 'encoding': 'UTF-8', 'locale': 'de', 'localeUnderscoreDelimited': 'de', 'languageDirection': 'ltr', 'isPrivate': false, 'isMobile': false, 'isMobileRequest': false, 'mobileClass': '', 'isPrivateBlog': false, 'isDynamicViewsAvailable': true, 'feedLinks': '\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22lotro revenge - Atom\x22 href\x3d\x22http://bwgypyth.blogspot.com/feeds/posts/default\x22 /\x3e\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/rss+xml\x22 title\x3d\x22lotro revenge - RSS\x22 href\x3d\x22http://bwgypyth.blogspot.com/feeds/posts/default?alt\x3drss\x22 /\x3e\n\x3clink rel\x3d\x22service.post\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22lotro revenge - Atom\x22 href\x3d\x22https://www.blogger.com/feeds/5998090735925918818/posts/default\x22 /\x3e\n\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22lotro revenge - Atom\x22 href\x3d\x22http://bwgypyth.blogspot.com/feeds/5443309192279437670/comments/default\x22 /\x3e\n', 'meTag': '', 'adsenseHostId': 'ca-host-pub-1556223355139109', 'adsenseHasAds': false, 'ieCssRetrofitLinks': '\x3c!--[if IE]\x3e\x3cscript type\x3d\x22text/javascript\x22 src\x3d\x22https://www.blogger.com/static/v1/jsbin/4244862144-ieretrofit.js\x22\x3e\x3c/script\x3e\n\x3c![endif]--\x3e', 'view': '', 'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/4224c15c4e7c9321/js/comments.js', 'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/e935819f51c62627', 'plusOneApiSrc': 'https://apis.google.com/js/plusone.js', 'disableGComments': true, 'sharing': {'platforms': [{'name': 'Link abrufen', 'key': 'link', 'shareMessage': 'Link abrufen', 'target': ''}, {'name': 'Facebook', 'key': 'facebook', 'shareMessage': 'Über Facebook teilen', 'target': 'facebook'}, {'name': 'BlogThis!', 'key': 'blogThis', 'shareMessage': 'BlogThis!', 'target': 'blog'}, {'name': 'Twitter', 'key': 'twitter', 'shareMessage': 'Über Twitter teilen', 'target': 'twitter'}, {'name': 'Pinterest', 'key': 'pinterest', 'shareMessage': 'Über Pinterest teilen', 'target': 'pinterest'}, {'name': 'E-Mail', 'key': 'email', 'shareMessage': 'E-Mail', 'target': 'email'}], 'disableGooglePlus': true, 'googlePlusShareButtonWidth': 300, 'googlePlusBootstrap': '\x3cscript type\x3d\x22text/javascript\x22\x3ewindow.___gcfg \x3d {\x27lang\x27: \x27de\x27};\x3c/script\x3e'}, 'hasCustomJumpLinkMessage': false, 'jumpLinkMessage': 'Mehr anzeigen', 'pageType': 'item', 'postId': '5443309192279437670', 'pageName': 'HowTo: Understand 0B000002 vs. 0B004002 packets', 'pageTitle': 'lotro revenge: HowTo: Understand 0B000002 vs. 0B004002 packets'}}, {'name': 'features', 'data': {'sharing_get_link_dialog': 'true', 'sharing_native': 'false'}}, {'name': 'messages', 'data': {'edit': 'Bearbeiten', 'linkCopiedToClipboard': 'Link in Zwischenablage kopiert.', 'ok': 'OK', 'postLink': 'Link zum Post'}}, {'name': 'template', 'data': {'name': 'Simple', 'localizedName': 'Einfach', 'isResponsive': false, 'isAlternateRendering': false, 'isCustom': false, 'variant': 'pale', 'variantId': 'pale'}}, {'name': 'view', 'data': {'classic': {'name': 'classic', 'url': '?view\x3dclassic'}, 'flipcard': {'name': 'flipcard', 'url': '?view\x3dflipcard'}, 'magazine': {'name': 'magazine', 'url': '?view\x3dmagazine'}, 'mosaic': {'name': 'mosaic', 'url': '?view\x3dmosaic'}, 'sidebar': {'name': 'sidebar', 'url': '?view\x3dsidebar'}, 'snapshot': {'name': 'snapshot', 'url': '?view\x3dsnapshot'}, 'timeslide': {'name': 'timeslide', 'url': '?view\x3dtimeslide'}, 'isMobile': false, 'title': 'HowTo: Understand 0B000002 vs. 0B004002 packets', 'description': 'The&#160;0B000002 and&#160;0B004002 are both ping pong packets (i.e. they are exchanged between client and server without any user input, just to conf...', 'url': 'http://bwgypyth.blogspot.com/2016/11/howto-understand-0b000002-vs-0b004002.html', 'type': 'item', 'isSingleItem': true, 'isMultipleItems': false, 'isError': false, 'isPage': false, 'isPost': true, 'isHomepage': false, 'isArchive': false, 'isLabelSearch': false, 'postId': 5443309192279437670}}]);
+_WidgetManager._RegisterWidget('_NavbarView', new _WidgetInfo('Navbar1', 'navbar', document.getElementById('Navbar1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'header', document.getElementById('Header1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'lightboxEnabled': true, 'lightboxModuleUrl': 'https://www.blogger.com/static/v1/jsbin/3554439735-lbx__de.js', 'lightboxCssUrl': 'https://www.blogger.com/static/v1/v-css/368954415-lightbox_bundle.css'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogArchiveView', new _WidgetInfo('BlogArchive2', 'sidebar-right-1', document.getElementById('BlogArchive2'), {'languageDirection': 'ltr', 'loadingMessage': 'Wird geladen\x26hellip;'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_AttributionView', new _WidgetInfo('Attribution1', 'footer-3', document.getElementById('Attribution1'), {}, 'displayModeFull'));
+</script>
+</body>
+
+<!-- Mirrored from bwgypyth.blogspot.com/2016/11/howto-understand-0b000002-vs-0b004002.html?showComment=1597664159889 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Oct 2020 22:10:56 GMT -->
+</html>
